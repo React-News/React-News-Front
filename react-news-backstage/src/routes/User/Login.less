@@ -1,4 +1,4 @@
-@import "~antd/lib/style/themes/default.less";
+@import '~antd/lib/style/themes/default.less';
 
 .main {
   width: 368px;
@@ -43,15 +43,13 @@
   .additional {
     text-align: left;
 
-    .forgot {
-      float: right;
-    }
-
     .submit {
       width: 100%;
       margin-top: 24px;
     }
-
+    .register {
+      float: right;
+    }
     :global {
       .ant-form-item-control {
         line-height: 22px;
@@ -59,7 +57,9 @@
     }
   }
 
-  .iconAlipay, .iconTaobao, .iconWeibo {
+  .iconAlipay,
+  .iconTaobao,
+  .iconWeibo {
     display: inline-block;
     width: 24px;
     height: 24px;
@@ -90,16 +90,6 @@
 
     &:hover {
       background-position: 0 -48px;
-    }
-  }
-
-  .other {
-    text-align: left;
-    margin-top: 24px;
-    line-height: 22px;
-
-    .register {
-      float: right;
     }
   }
 }
