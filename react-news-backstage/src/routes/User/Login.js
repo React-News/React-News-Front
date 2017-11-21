@@ -65,7 +65,7 @@ export default class Login extends Component {
   render() {
     const { form, login } = this.props;
     const { getFieldDecorator } = form;
-    const { count, type } = this.state;
+    const { type } = this.state;
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>

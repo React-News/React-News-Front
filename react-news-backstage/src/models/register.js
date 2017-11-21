@@ -1,42 +1,71 @@
-import { fakeRegister } from '../services/api';
+import { notification } from 'antd';
+import { register } from '../services/api';
 
 export default {
   namespace: 'register',
 
   state: {
     status: undefined,
+    userData: {
+      uID: undefined,
+      uTelNum: undefined
+    }
   },
 
   effects: {
     *submit(_, { call, put }) {
       yield put({
         type: 'changeSubmitting',
-        payload: true,
+        payload: true
       });
-      const response = yield call(fakeRegister);
+      const response = yield call(register);
+      if (response.status === '200') {
+        yield put({
+          type: 'successRegister',
+          payload: response.data
+        });
+      } else {
+        yield notification.error({
+          message: '失败',
+          description: response.msg
+        });
+      }
       yield put({
         type: 'registerHandle',
-        payload: response,
+        payload: response
       });
       yield put({
         type: 'changeSubmitting',
-        payload: false,
+        payload: false
       });
-    },
+    }
   },
 
   reducers: {
     registerHandle(state, { payload }) {
       return {
         ...state,
-        status: payload.status,
+        status: payload.status
       };
     },
     changeSubmitting(state, { payload }) {
       return {
         ...state,
-        submitting: payload,
+        submitting: payload
       };
     },
-  },
+    successRegister(state, { payload }) {
+      notification.success({
+        message: '成功',
+        description: '恭喜你注册成功'
+      });
+      return {
+        ...state,
+        userData: {
+          uID: payload.uID,
+          uTelNum: payload.uTelNum
+        }
+      };
+    }
+  }
 };
