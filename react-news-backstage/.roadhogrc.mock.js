@@ -73,8 +73,8 @@ const proxy = {
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
   'POST /api/login': (req, res) => {
-    const { password, userName } = req.body;
-    res.send({ status: password === '888888' && userName === 'admin' ? 'ok' : 'error', type: 'account' });
+    const { uPasswd, uTelNum } = req.body;
+    res.send({ status: uPasswd === '123456' && uTelNum === '15147153946' ? '200' : '400', msg: '登陆成功' });
   },
   'POST /api/register': (req, res) => {
     res.send({ status: '200', msg: '注册成功', data: {

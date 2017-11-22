@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert } from 'antd';
+import { Form, Input, Tabs, Button, Icon, Checkbox, Alert } from 'antd';
 import styles from './Login.less';
 
 const FormItem = Form.Item;
@@ -18,13 +18,9 @@ export default class Login extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.login.status === 'ok') {
+    if (nextProps.login.status === '200') {
       this.props.dispatch(routerRedux.push('/'));
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
   }
 
   onSwitch = key => {
@@ -33,25 +29,13 @@ export default class Login extends Component {
     });
   };
 
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
-  };
-
   handleSubmit = e => {
     e.preventDefault();
-    const { type } = this.state;
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
+        console.log(values)
         this.props.dispatch({
-          type: `login/${type}Submit`,
+          type: `login/submit`,
           payload: values
         });
       }
@@ -71,9 +55,9 @@ export default class Login extends Component {
         <Form onSubmit={this.handleSubmit}>
           <Tabs animated={false} className={styles.tabs} activeKey={type} onChange={this.onSwitch}>
             <TabPane tab="账户密码登录" key="account">
-              {login.status === 'error' && login.type === 'account' && login.submitting === false && this.renderMessage('账户或密码错误')}
+              {login.status === '400' && login.submitting === false && this.renderMessage('账户或密码错误')}
               <FormItem>
-                {getFieldDecorator('uName', {
+                {getFieldDecorator('uTelNum', {
                   rules: [
                     {
                       required: type === 'account',
