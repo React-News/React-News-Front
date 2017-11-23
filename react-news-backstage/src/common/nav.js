@@ -173,7 +173,7 @@ export const getNavData = app => [
         name: '我的收藏',
         path: 'my-collection',
         icon: 'star',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, [], import('../routes/Collection'))
       },
       {
         name: '查看历史',
@@ -195,7 +195,7 @@ export const getNavData = app => [
           {
             name: '新增新闻',
             path: 'add-news',
-            component: dynamicWrapper(app, [], import('../routes/Exception/404'))
+            component: dynamicWrapper(app, [], import('../routes/AddNews'))
           },
           {
             name: '删除新闻',

@@ -15,10 +15,10 @@ class BasicForms extends PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        delete values.confirm
-        console.log(values)
+        delete values.confirm;
+        console.log(values);
       } else {
-        console.log(err)
+        console.log(err);
       }
     });
   };
