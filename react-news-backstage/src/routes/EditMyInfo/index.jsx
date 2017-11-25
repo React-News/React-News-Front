@@ -1,16 +1,39 @@
 import React, { PureComponent } from 'react';
-import { Form, Input, Button, Card, Radio, InputNumber } from 'antd';
-import './index.less';
+import { Form, Input, Button, Card, Radio, InputNumber, Upload, message, Icon } from 'antd';
+import styles from './index.less';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const TextArea = Input.TextArea;
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
 
+function beforeUpload(file) {
+  const isJPG = file.type === 'image/jpeg';
+  if (!isJPG) {
+    message.error('You can only upload JPG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJPG && isLt2M;
+}
 @Form.create()
 class BasicForms extends PureComponent {
   state = {
     confirmDirty: false
   };
+  handleChange = (info) => {
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -63,45 +86,15 @@ class BasicForms extends PureComponent {
         sm: { span: 10, offset: 3 }
       }
     };
+    const imageUrl = this.state.imageUrl;
     return (
       <div>
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 24 }}>
-            <FormItem {...formItemLayout} label="手机号" hasFeedback>
-              {getFieldDecorator('uTelNum', {
-                rules: [{ required: true, message: '请输入你的手机号' }, { pattern: /^[0-9]+$/, message: '请输入数字的组合' }]
-              })(<Input placeholder="请输入你的手机号" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="用户名" hasFeedback>
+            <FormItem {...formItemLayout} label="昵称" hasFeedback>
               {getFieldDecorator('uName', {
-                rules: [{ required: true, message: '请输入用户名' }, { pattern: /^\S+$/, message: '请使用非空字符作为用户名' }]
-              })(<Input placeholder="张三" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="密码" hasFeedback>
-              {getFieldDecorator('uPasswd', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入密码'
-                  },
-                  {
-                    validator: this.checkConfirm
-                  }
-                ]
-              })(<Input type="password" placeholder="Password" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="密码验证" hasFeedback>
-              {getFieldDecorator('confirm', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请再次输入相同的密码'
-                  },
-                  {
-                    validator: this.checkPassword
-                  }
-                ]
-              })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+                rules: [{ required: true, message: '请输入你的昵称' }, { pattern: /^\S+$/, message: '请使用非空字符作为你的昵称' }]
+              })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="性别">
               {getFieldDecorator('uSex')(
@@ -116,6 +109,25 @@ class BasicForms extends PureComponent {
               {getFieldDecorator('uAge', {
                 rules: [{ required: true, message: '请输入你的年龄' }]
               })(<InputNumber min={1} max={100} style={{ width: '100%' }} />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="更改头像">
+              <div>
+                {getFieldDecorator('nImg', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: this.normFile
+                })(
+                  <Upload
+                    className={styles['avatar-uploader']}
+                    name="avatar"
+                    showUploadList={false}
+                    action="//jsonplaceholder.typicode.com/posts/"
+                    beforeUpload={beforeUpload}
+                    onChange={this.handleChange}
+                  >
+                    {imageUrl ? <img src={imageUrl} alt="" className="avatar" /> : <Icon type="plus" className={styles['avatar-uploader-trigger']} />}
+                  </Upload>
+                )}
+              </div>
             </FormItem>
             <FormItem {...formItemLayout} label="个人简介" hasFeedback>
               {getFieldDecorator('uDescribe')(<TextArea placeholder="SHOW出你自己吧～" />)}
