@@ -16,7 +16,7 @@ const pageSize = 5;
 @connect(state => ({
   list: state.list
 }))
-export default class Collection extends Component {
+export default class WatchHistory extends Component {
   componentDidMount() {
     this.fetchMore();
   }

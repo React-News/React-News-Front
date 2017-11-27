@@ -179,13 +179,13 @@ export const getNavData = app => [
         name: '查看历史',
         path: 'watch-history',
         icon: 'eye',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, ['list'], import('../routes/WatchHistory'))
       },
       {
         name: '我的评论',
         path: 'my-comment',
         icon: 'message',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, ['list'], import('../routes/MyComment'))
       },
       {
         name: '编辑特权',
