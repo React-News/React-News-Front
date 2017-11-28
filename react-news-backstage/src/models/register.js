@@ -13,12 +13,13 @@ export default {
   },
 
   effects: {
-    *submit(_, { call, put }) {
+    *submit({ payload }, { call, put }) {
       yield put({
         type: 'changeSubmitting',
         payload: true
       });
-      const response = yield call(register);
+      yield console.log(payload)
+      const response = yield call(register, payload);
       if (response.status === '200') {
         yield put({
           type: 'successRegister',
@@ -29,6 +30,7 @@ export default {
           message: '失败',
           description: response.msg
         });
+        yield console.log(response);
       }
       yield put({
         type: 'registerHandle',

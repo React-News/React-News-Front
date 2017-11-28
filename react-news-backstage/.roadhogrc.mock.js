@@ -75,20 +75,20 @@ const proxy = {
   'POST /api/login': (req, res) => {
     const { uPasswd, uTelNum } = req.body;
     res.send({ status: uPasswd === '123456' && uTelNum === '15147153946' ? '200' : '400', msg: '登陆成功', data: { uID: 1 } });
-  },
-  'POST /api/register': (req, res) => {
-    res.send({
-      status: '200',
-      msg: '注册成功',
-      data: {
-        uID: 1,
-        uTelNum: 15147153946,
-        uPasswd: 'passwordishere'
-      }
-    });
-    // res.send({ status: '400', msg: '注册失败' });
-  },
-  'GET /api/notices': getNotices
+  }
+  // 'POST /api/register': (req, res) => {
+  //   res.send({
+  //     status: '200',
+  //     msg: '注册成功',
+  //     data: {
+  //       uID: 1,
+  //       uTelNum: 15147153946,
+  //       uPasswd: 'passwordishere'
+  //     }
+  //   });
+  //   // res.send({ status: '400', msg: '注册失败' });
+  // },
 };
 
-export default (noProxy ? {} : delay(proxy, 1000));
+export default (noProxy ? {} : delay(format(proxy), 1000));
+// export default {}
