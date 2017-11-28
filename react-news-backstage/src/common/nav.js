@@ -195,12 +195,12 @@ export const getNavData = app => [
           {
             name: '新增新闻',
             path: 'add-news',
-            component: dynamicWrapper(app, [], import('../routes/AddNews'))
+            component: dynamicWrapper(app, [], import('../routes/EditerAuthority/AddNews'))
           },
           {
             name: '删除新闻',
             path: 'delete-news',
-            component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+            component: dynamicWrapper(app, ['rule'], import('../routes/EditerAuthority/DeleteNews'))
           }
         ]
       },
@@ -208,19 +208,19 @@ export const getNavData = app => [
         name: '权限管理',
         path: 'authority-manage',
         icon: 'api',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, ['rule'], import('../routes/AuthorityManage'))
       },
       {
         name: '删除新闻',
         path: 'delete-news-admin',
         icon: 'delete',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, ['rule'], import('../routes/DeleteNews'))
       },
       {
         name: '用户列表',
         path: 'user-list',
         icon: 'user',
-        component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
+        component: dynamicWrapper(app, ['rule'], import('../routes/UserList'))
       }
     ]
   },
