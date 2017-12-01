@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "precommit": "npm run lint-staged",
-    "start": "roadhog server",
+    "start": "PORT=8080 roadhog server",
     "start:no-proxy": "cross-env NO_PROXY=true roadhog server",
     "build": "roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
@@ -81,27 +81,14 @@
     "nightmare": "^2.10.0"
   },
   "babel": {
-    "presets": [
-      "env",
-      "react"
-    ],
-    "plugins": [
-      "transform-decorators-legacy",
-      "transform-class-properties"
-    ]
+    "presets": ["env", "react"],
+    "plugins": ["transform-decorators-legacy", "transform-class-properties"]
   },
   "jest": {
-    "setupFiles": [
-      "<rootDir>/tests/setupTests.js"
-    ],
-    "testMatch": [
-      "**/?(*.)(spec|test|e2e).js?(x)"
-    ],
+    "setupFiles": ["<rootDir>/tests/setupTests.js"],
+    "testMatch": ["**/?(*.)(spec|test|e2e).js?(x)"],
     "setupTestFrameworkScriptFile": "<rootDir>/tests/jasmine.js",
-    "moduleFileExtensions": [
-      "js",
-      "jsx"
-    ],
+    "moduleFileExtensions": ["js", "jsx"],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/tests/styleMock.js"
     }

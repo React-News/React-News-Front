@@ -29,7 +29,7 @@ export default {
       yield put({
         type: 'changeLoginStatus',
         payload: {
-          status: false
+          status: '400'
         }
       });
       yield put(routerRedux.push('/user/login'));
@@ -38,6 +38,9 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      if (payload.status === '200') {
+        sessionStorage.setItem('uID', payload.data.uID);
+      }
       return {
         ...state,
         status: payload.status
