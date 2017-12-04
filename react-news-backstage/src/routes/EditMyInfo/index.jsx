@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import { Form, Input, Button, Card, Radio, InputNumber, Upload, message, Icon } from 'antd';
 import styles from './index.less';
 
@@ -10,28 +11,35 @@ function getBase64(img, callback) {
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
 }
-
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
+@connect(state => ({
+  user: state.user
+}))
 @Form.create()
-class BasicForms extends PureComponent {
+class EditMyInfo extends PureComponent {
   state = {
-    confirmDirty: false
+    confirmDirty: false,
+    imageUrl: null
   };
-  handleChange = (info) => {
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
+  componentDidMount() {
+    console.log(this.props);
+    let currentUser = this.props.user.currentUser;
+    this.setState({
+      imageUrl: currentUser.uAvatar
+    });
+  }
+  beforeUpload = file => {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isImg = file.type === 'image/png' || file.type === 'image/jpeg'
+    if(!isImg) {
+      message.error('你应该上传图片作为头像');
     }
+    if (isImg && !isLt2M) {
+      message.error('你上传的图片大小不应超过2M');
+    }
+    if(isLt2M && isImg) {
+      getBase64(file, imageUrl => this.setState({ imageUrl }))
+    }
+    return false;
   }
 
   handleSubmit = e => {
@@ -39,6 +47,7 @@ class BasicForms extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         delete values.confirm;
+        values.uAvatar = this.state.imageUrl
         console.log(values);
       } else {
         console.log(err);
@@ -67,6 +76,7 @@ class BasicForms extends PureComponent {
   render() {
     const { submitting } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const { currentUser } = this.props.user;
 
     const formItemLayout = {
       labelCol: {
@@ -93,44 +103,41 @@ class BasicForms extends PureComponent {
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 24 }}>
             <FormItem {...formItemLayout} label="昵称" hasFeedback>
               {getFieldDecorator('uName', {
-                rules: [{ required: true, message: '请输入你的昵称' }, { pattern: /^\S+$/, message: '请使用非空字符作为你的昵称' }]
+                rules: [{ required: true, message: '请输入你的昵称' }, { pattern: /^\S+$/, message: '请使用非空字符作为你的昵称' }],
+                initialValue: currentUser.uName
               })(<Input />)}
             </FormItem>
             <FormItem {...formItemLayout} label="性别">
-              {getFieldDecorator('uSex')(
+              {getFieldDecorator('uSex', {
+                initialValue: currentUser.uSex
+              })(
                 <RadioGroup>
-                  <Radio value="male">男</Radio>
-                  <Radio value="female">女</Radio>
-                  <Radio value="other">保密</Radio>
+                  <Radio value="MALE">男</Radio>
+                  <Radio value="FEMALE">女</Radio>
+                  <Radio value="OTHER">保密</Radio>
                 </RadioGroup>
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="年龄">
               {getFieldDecorator('uAge', {
-                rules: [{ required: true, message: '请输入你的年龄' }]
+                rules: [{ required: true, message: '请输入你的年龄' }],
+                initialValue: currentUser.uAge
               })(<InputNumber min={1} max={100} style={{ width: '100%' }} />)}
             </FormItem>
             <FormItem {...formItemLayout} label="更改头像">
-              <div>
-                {getFieldDecorator('nImg', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: this.normFile
-                })(
-                  <Upload
-                    className={styles['avatar-uploader']}
-                    name="avatar"
-                    showUploadList={false}
-                    action="//jsonplaceholder.typicode.com/posts/"
-                    beforeUpload={beforeUpload}
-                    onChange={this.handleChange}
-                  >
-                    {imageUrl ? <img src={imageUrl} alt="" className="avatar" /> : <Icon type="plus" className={styles['avatar-uploader-trigger']} />}
-                  </Upload>
-                )}
-              </div>
+              <Upload
+                className={styles['avatar-uploader']}
+                name="avatar"
+                showUploadList={false}
+                data={{ uID: currentUser.uID }}
+                action="//jsonplaceholder.typicode.com/posts/"
+                beforeUpload={this.beforeUpload}
+              >
+                {imageUrl ? <img src={imageUrl} alt="" className={styles.avatar} /> : <Icon type="plus" className={styles['avatar-uploader-trigger']} />}
+              </Upload>
             </FormItem>
             <FormItem {...formItemLayout} label="个人简介" hasFeedback>
-              {getFieldDecorator('uDescribe')(<TextArea placeholder="SHOW出你自己吧～" />)}
+              {getFieldDecorator('uDescribe', { initialValue: currentUser.uDescribe })(<TextArea placeholder="SHOW出你自己吧～" />)}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 40 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
@@ -144,4 +151,4 @@ class BasicForms extends PureComponent {
   }
 }
 
-export default BasicForms;
+export default EditMyInfo;

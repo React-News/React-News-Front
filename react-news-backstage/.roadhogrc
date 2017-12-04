@@ -17,14 +17,14 @@
     "g2-plugin-slider": "G2.Plugin.slider"
   },
   "ignoreMomentLocale": true,
-  "theme": "./src/theme.js",
-  "proxy": {
-    "/api/register": {
-      "target": "http://10.0.63.5:8080/api/register",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/api/register": ""
-      }
-    }
-  }
+  "theme": "./src/theme.js"
+  // "proxy": {
+  //   "/api/register": {
+  //     "target": "http://10.0.63.5:8080/api/register",
+  //     "changeOrigin": true,
+  //     "pathRewrite": {
+  //       "^/api/register": ""
+  //     }
+  //   }
+  // }
 }

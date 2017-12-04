@@ -16,7 +16,6 @@ export default class Login extends Component {
     count: 0,
     type: 'account'
   };
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.login.status === '200') {
       this.props.dispatch(routerRedux.push('/'));
@@ -33,7 +32,7 @@ export default class Login extends Component {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        console.log(values)
+        console.log(values);
         this.props.dispatch({
           type: `login/submit`,
           payload: values

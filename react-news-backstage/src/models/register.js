@@ -65,7 +65,8 @@ export default {
         ...state,
         userData: {
           uID: payload.uID,
-          uTelNum: payload.uTelNum
+          uTelNum: payload.uTelNum,
+          uPasswd: payload.uPasswd
         }
       };
     }

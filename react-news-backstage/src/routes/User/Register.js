@@ -32,6 +32,10 @@ export default class Register extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.register.status === '200') {
+      this.props.dispatch({
+        type: `login/submit`,
+        payload: nextProps.register.userData
+      });
       this.props.dispatch(routerRedux.push('/user/register-result'));
     }
   }
