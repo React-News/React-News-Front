@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { query as queryUsers, queryCurrent, editUserInfo } from '../services/user';
 
 export default {
@@ -6,6 +7,7 @@ export default {
   state: {
     list: [],
     loading: false,
+    editUserInfoStatus: '400',
     currentUser: {}
   },
 
@@ -32,15 +34,26 @@ export default {
         payload: response.data
       });
     },
+    *initEditUserInfo(_, { call, put }) {
+      yield put({
+        type: 'setEditUserInfoStatus',
+        payload: '400'
+      });
+    },
     *editUserInfo({ payload }, { call, put }) {
       const response = yield call(editUserInfo, payload);
+      yield put({
+        type: 'setEditUserInfoStatus',
+        payload: response.status
+      });
       if (response.status === '200') {
         yield put({
           type: 'saveCurrentUser',
           payload: response.data
         });
+        yield message.success('修改个人信息成功');
       } else {
-        console.log('修改个人信息失败');
+        yield message.error('修改个人信息失败');
       }
     }
   },
@@ -62,6 +75,12 @@ export default {
       return {
         ...state,
         currentUser: action.payload
+      };
+    },
+    setEditUserInfoStatus(state, action) {
+      return {
+        ...state,
+        editUserInfoStatus: action.payload
       };
     }
   }

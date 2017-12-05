@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Card, Radio, InputNumber, Upload, message, Icon } from 'antd';
+import { routerRedux } from 'dva/router';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -25,6 +26,14 @@ class EditMyInfo extends Component {
     this.setState({
       imageUrl: currentUser.uAvatar
     });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user.editUserInfoStatus === '200') {
+      this.props.dispatch(routerRedux.push('/'));
+      this.props.dispatch({
+        type: 'user/initEditUserInfo'
+      });
+    }
   }
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
