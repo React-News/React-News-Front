@@ -6,7 +6,7 @@ export async function query() {
 
 export async function queryCurrent() {
   let uID = sessionStorage.getItem('uID');
-  return request(`/api/getUserInfo?uID=${uID}`);
+  return request(`/api/userInfo?uID=${uID}`);
 }
 
 export async function editUserInfo(params) {

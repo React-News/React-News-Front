@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input } from 'antd';
+import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input, Modal, message } from 'antd';
 
 import StandardFormRow from '../../components/StandardFormRow';
 import TagSelect from '../../components/TagSelect';
 import styles from './index.less';
 
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 const pageSize = 5;
 
@@ -29,7 +30,22 @@ export default class Collection extends Component {
       }
     });
   };
-
+  showDeleteConfirm = cID => {
+    confirm({
+      title: '警告',
+      content: '你想取消此条新闻的收藏么?' + cID,
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        })
+          .then(() => {
+            message.success('收藏取消成功');
+          })
+          .catch(() => console.log('Oops errors!'));
+      },
+      onCancel() {}
+    });
+  };
   render() {
     const { form, list: { list, loading } } = this.props;
     const { getFieldDecorator } = form;
@@ -41,12 +57,12 @@ export default class Collection extends Component {
       </span>
     );
 
-    const ListContent = ({ data: { content, updatedAt, avatar, owner, href } }) => (
+    const ListContent = ({ data: { content, updatedAt, avatar, owner } }) => (
       <div className={styles.listContent}>
         <div className={styles.description}>{content}</div>
         <div className={styles.extra}>
           <Avatar src={avatar} size="small" />
-          <a href={href}>{owner}</a> 发布在 <a href={href}>{href}</a>
+          {owner}
           <em>{moment(updatedAt).format('YYYY-MM-DD hh:mm')}</em>
         </div>
       </div>
@@ -106,7 +122,13 @@ export default class Collection extends Component {
             renderItem={item => (
               <List.Item
                 key={item.id}
-                actions={[<IconText type="star-o" text={item.star} key="star" />, <IconText type="message" text={item.message} key="like" />]}
+                actions={[
+                  <IconText type="star-o" text={item.star} key="star" />,
+                  <IconText type="message" text={item.message} key="like" />,
+                  <Button type="danger" icon="delete" size="small" onClick={this.showDeleteConfirm.bind(this, item.id)} key="deleteConlection">
+                    删除收藏
+                  </Button>
+                ]}
                 extra={<div className={styles.listItemExtra} />}
               >
                 <List.Item.Meta
