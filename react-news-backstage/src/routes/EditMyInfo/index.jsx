@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Card, Radio, InputNumber, Upload, message, Icon } from 'antd';
 import styles from './index.less';
@@ -15,13 +15,12 @@ function getBase64(img, callback) {
   user: state.user
 }))
 @Form.create()
-class EditMyInfo extends PureComponent {
+class EditMyInfo extends Component {
   state = {
     confirmDirty: false,
     imageUrl: null
   };
   componentDidMount() {
-    console.log(this.props);
     let currentUser = this.props.user.currentUser;
     this.setState({
       imageUrl: currentUser.uAvatar
@@ -29,26 +28,29 @@ class EditMyInfo extends PureComponent {
   }
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
-    const isImg = file.type === 'image/png' || file.type === 'image/jpeg'
-    if(!isImg) {
+    const isImg = file.type === 'image/png' || file.type === 'image/jpeg';
+    if (!isImg) {
       message.error('你应该上传图片作为头像');
     }
     if (isImg && !isLt2M) {
       message.error('你上传的图片大小不应超过2M');
     }
-    if(isLt2M && isImg) {
-      getBase64(file, imageUrl => this.setState({ imageUrl }))
+    if (isLt2M && isImg) {
+      getBase64(file, imageUrl => this.setState({ imageUrl }));
     }
     return false;
-  }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         delete values.confirm;
-        values.uAvatar = this.state.imageUrl
-        console.log(values);
+        values.uAvatar = this.state.imageUrl;
+        this.props.dispatch({
+          type: 'user/editUserInfo',
+          payload: values
+        });
       } else {
         console.log(err);
       }
