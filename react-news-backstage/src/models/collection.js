@@ -10,6 +10,7 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
+      yield console.log('fetch', payload);
       yield put({
         type: 'changeLoading',
         payload: true
@@ -24,6 +25,22 @@ export default {
         type: 'changeLoading',
         payload: false
       });
+    },
+    *initFetch({ payload }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true
+      });
+      const response = yield call(queryCollectionList, payload);
+      yield console.log(response);
+      yield put({
+        type: 'replaceList',
+        payload: Array.isArray(response.data) ? response.data : []
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false
+      });
     }
   },
 
@@ -32,6 +49,12 @@ export default {
       return {
         ...state,
         list: state.list.concat(action.payload)
+      };
+    },
+    replaceList(state, action) {
+      return {
+        ...state,
+        list: action.payload
       };
     },
     changeLoading(state, action) {

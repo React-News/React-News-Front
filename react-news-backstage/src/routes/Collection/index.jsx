@@ -2,20 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import {
-  Form,
-  Card,
-  List,
-  Tag,
-  Icon,
-  Avatar,
-  Row,
-  Col,
-  Button,
-  Input,
-  Modal,
-  message
-} from 'antd';
+import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input, Modal, message } from 'antd';
 import { TYPE } from '../../utils/utils';
 import StandardFormRow from '../../components/StandardFormRow';
 import TagSelect from '../../components/TagSelect';
@@ -32,25 +19,48 @@ const pageSize = 5;
   user: state.user
 }))
 export default class Collection extends Component {
+  state = {
+    help: ''
+  };
   componentDidMount() {
-    this.fetchMore();
+    this.initFetch();
   }
-
-  fetchMore = () => {
-    console.log(this.props);
-    console.log({
-      count: pageSize,
-      uID: this.props.user.currentUser.uID,
-      type: ['SPORT', 'OTHER'],
-      keywd: 'Hello'
+  initFetch = () => {
+    const { form, user } = this.props;
+    this.props.dispatch({
+      type: 'collection/initFetch',
+      payload: {
+        count: pageSize,
+        total: 0,
+        uID: user.currentUser.uID,
+        type: form.getFieldValue('nType'),
+        keywd: form.getFieldValue('keywd') || ''
+      }
     });
+  };
+  fetchMore = () => {
+    const { form, user, collection: { list } } = this.props;
     this.props.dispatch({
       type: 'collection/fetch',
       payload: {
         count: pageSize,
-        uID: '1',
-        type: ['SPORT', 'OTHER'],
-        keywd: 'Hello'
+        total: list.length,
+        uID: user.currentUser.uID,
+        type: form.getFieldValue('nType'),
+        keywd: form.getFieldValue('keywd') || ''
+      }
+    });
+  };
+  handleFormSubmit = checkedTags => {
+    this.props.form.validateFields({ force: true }, (err, values) => {
+      if (!err) {
+        const { form, user } = this.props;
+        console.log({
+          count: pageSize,
+          uID: user.currentUser.uID,
+          type: Array.isArray(checkedTags) ? checkedTags : form.getFieldValue('nType'),
+          keywd: form.getFieldValue('keywd') || ''
+        });
       }
     });
   };
@@ -69,6 +79,19 @@ export default class Collection extends Component {
       },
       onCancel() {}
     });
+  };
+  checkType = (rule, value, callback) => {
+    if (value.length === 0) {
+      this.setState({
+        help: '你应该至少选择一个类目',
+      });
+      callback('error');
+    } else {
+      this.setState({
+        help: ''
+      });
+      callback()
+    }
   };
   render() {
     const { form, collection: { list, loading } } = this.props;
@@ -94,10 +117,7 @@ export default class Collection extends Component {
     const loadMore =
       list.length > 0 ? (
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <Button
-            onClick={this.fetchMore}
-            style={{ paddingLeft: 48, paddingRight: 48 }}
-          >
+          <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
             {loading ? (
               <span>
                 <Icon type="loading" /> 加载中...
@@ -113,14 +133,17 @@ export default class Collection extends Component {
       <div>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow
-              title="所属类目"
-              block
-              style={{ paddingBottom: 11 }}
-            >
-              <FormItem>
-                {getFieldDecorator('category')(
-                  <TagSelect onChange={this.handleFormSubmit}>
+            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
+              <FormItem help={this.state.help}>
+                {getFieldDecorator('nType', {
+                  rules: [
+                    {
+                      validator: this.checkType
+                    }
+                  ],
+                  initialValue: ['SPORT', 'TECH', 'SOCIETY', 'FINANCE', 'GAME', 'CAR', 'OTHER']
+                })(
+                  <TagSelect onChange={this.handleFormSubmit} expandable>
                     <TagSelect.Option value="SPORT">体育</TagSelect.Option>
                     <TagSelect.Option value="TECH">科技</TagSelect.Option>
                     <TagSelect.Option value="SOCIETY">社会</TagSelect.Option>
@@ -135,21 +158,13 @@ export default class Collection extends Component {
             <StandardFormRow title="按标题搜索" grid last>
               <Row>
                 <Col lg={16} md={24} sm={24} xs={24}>
-                  <Input.Search
-                    placeholder="请输入"
-                    enterButton="搜索"
-                    onSearch={this.handleFormSubmit}
-                  />
+                  <FormItem>{getFieldDecorator('keywd')(<Input.Search placeholder="请输入" enterButton="搜索" onSearch={this.handleFormSubmit} />)}</FormItem>
                 </Col>
               </Row>
             </StandardFormRow>
           </Form>
         </Card>
-        <Card
-          style={{ marginTop: 24 }}
-          bordered={false}
-          bodyStyle={{ padding: '8px 32px 32px 32px' }}
-        >
+        <Card style={{ marginTop: 24 }} bordered={false} bodyStyle={{ padding: '8px 32px 32px 32px' }}>
           <List
             size="large"
             loading={list.length === 0 ? loading : false}
@@ -162,18 +177,8 @@ export default class Collection extends Component {
                 key={item.cID}
                 actions={[
                   <IconText type="star-o" text={item.starNum} key="starNum" />,
-                  <IconText
-                    type="message"
-                    text={item.commentNum}
-                    key="commentNum"
-                  />,
-                  <Button
-                    type="danger"
-                    icon="delete"
-                    size="small"
-                    onClick={this.showDeleteConfirm.bind(this, item.id)}
-                    key="deleteConlection"
-                  >
+                  <IconText type="message" text={item.commentNum} key="commentNum" />,
+                  <Button type="danger" icon="delete" size="small" onClick={this.showDeleteConfirm.bind(this, item.cID)} key="deleteConlection">
                     删除收藏
                   </Button>
                 ]}
