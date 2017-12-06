@@ -18,7 +18,7 @@ export default {
       yield console.log(response);
       yield put({
         type: 'appendList',
-        payload: Array.isArray(response) ? response : []
+        payload: Array.isArray(response.data) ? response.data : []
       });
       yield put({
         type: 'changeLoading',

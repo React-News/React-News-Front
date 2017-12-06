@@ -1,6 +1,15 @@
 import { getUrlParams } from './utils';
 
-const titles = ['Alipay', 'Angular', 'Ant Design', 'Ant Design Pro', 'Bootstrap', 'React', 'Vue', 'Webpack'];
+const titles = [
+  '震惊！18岁少年竟然在宿舍干出这种事',
+  '内蒙古财经大学有智力的人TOP10',
+  '高通又起新官司，要直击苹果的痛处',
+  '《绝地求生》在 Xbox One X 上能以 60fps 运行',
+  '震惊！男人看了会沉默，女人看了会流泪！',
+  'React',
+  'Vue',
+  'Webpack'
+];
 const avatars = [
   'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
   'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
@@ -25,7 +34,18 @@ const desc = [
   '那时候我只会想自己想要什么，从不想自己拥有什么'
 ];
 const types = ['SPORT', 'TECH', 'SOCIETY', 'FINANCE', 'GAME', 'CAR', 'OTHER'];
-const user = ['付小小', '曲丽丽', '林东东', '周星星', '吴加好', '朱偏右', '鱼酱', '乐哥', '谭小仪', '仲尼'];
+const user = [
+  '付小小',
+  '曲丽丽',
+  '林东东',
+  '周星星',
+  '吴加好',
+  '朱偏右',
+  '鱼酱',
+  '乐哥',
+  '谭小仪',
+  '仲尼'
+];
 
 export function fakeList(count) {
   const list = [];
@@ -43,7 +63,8 @@ export function fakeList(count) {
       updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
       createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
       subDescription: desc[i % 5],
-      description: '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
+      description:
+        '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
       activeUser: Math.ceil(Math.random() * 100000) + 100000,
       newUser: Math.ceil(Math.random() * 1000) + 1000,
       star: Math.ceil(Math.random() * 100) + 100,
@@ -53,15 +74,18 @@ export function fakeList(count) {
         '段落示意：蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。',
       members: [
         {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
+          avatar:
+            'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
           name: '曲丽丽'
         },
         {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
+          avatar:
+            'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
           name: '王昭君'
         },
         {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
+          avatar:
+            'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
           name: '董娜娜'
         }
       ]
@@ -76,7 +100,7 @@ function fakeCollectionList(count) {
     list.push({
       cID: `fake-list-${i}`,
       newsInfo: {
-        nID: user[i % 10],
+        nID: `fake-news-${i}`,
         nTitle: titles[i % 8],
         nType: types[i % 8],
         createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
@@ -89,7 +113,7 @@ function fakeCollectionList(count) {
         uAvatar: avatars[i % 8]
       },
       starNum: Math.ceil(Math.random() * 100) + 100,
-      likeNum: Math.ceil(Math.random() * 100) + 100
+      commentNum: Math.ceil(Math.random() * 100) + 100
     });
   }
 

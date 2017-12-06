@@ -173,7 +173,7 @@ export const getNavData = app => [
         name: '我的收藏',
         path: 'my-collection',
         icon: 'star',
-        component: dynamicWrapper(app, ['list'], import('../routes/Collection'))
+        component: dynamicWrapper(app, ['collection'], import('../routes/Collection'))
       },
       {
         name: '查看历史',

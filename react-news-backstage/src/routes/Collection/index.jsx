@@ -2,8 +2,21 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input, Modal, message } from 'antd';
-
+import {
+  Form,
+  Card,
+  List,
+  Tag,
+  Icon,
+  Avatar,
+  Row,
+  Col,
+  Button,
+  Input,
+  Modal,
+  message
+} from 'antd';
+import { TYPE } from '../../utils/utils';
 import StandardFormRow from '../../components/StandardFormRow';
 import TagSelect from '../../components/TagSelect';
 import styles from './index.less';
@@ -15,7 +28,8 @@ const pageSize = 5;
 
 @Form.create()
 @connect(state => ({
-  list: state.list
+  collection: state.collection,
+  user: state.user
 }))
 export default class Collection extends Component {
   componentDidMount() {
@@ -23,10 +37,20 @@ export default class Collection extends Component {
   }
 
   fetchMore = () => {
+    console.log(this.props);
+    console.log({
+      count: pageSize,
+      uID: this.props.user.currentUser.uID,
+      type: ['SPORT', 'OTHER'],
+      keywd: 'Hello'
+    });
     this.props.dispatch({
-      type: 'list/fetch',
+      type: 'collection/fetch',
       payload: {
-        count: pageSize
+        count: pageSize,
+        uID: '1',
+        type: ['SPORT', 'OTHER'],
+        keywd: 'Hello'
       }
     });
   };
@@ -47,7 +71,7 @@ export default class Collection extends Component {
     });
   };
   render() {
-    const { form, list: { list, loading } } = this.props;
+    const { form, collection: { list, loading } } = this.props;
     const { getFieldDecorator } = form;
 
     const IconText = ({ type, text }) => (
@@ -57,21 +81,23 @@ export default class Collection extends Component {
       </span>
     );
 
-    const ListContent = ({ data: { content, updatedAt, avatar, owner } }) => (
+    const ListContent = ({ data: { newsInfo, createrInfo } }) => (
       <div className={styles.listContent}>
-        <div className={styles.description}>{content}</div>
+        <div className={styles.description}>{newsInfo.desc}</div>
         <div className={styles.extra}>
-          <Avatar src={avatar} size="small" />
-          {owner}
-          <em>{moment(updatedAt).format('YYYY-MM-DD hh:mm')}</em>
+          <Avatar src={createrInfo.uAvatar} size="small" />
+          {createrInfo.uName}
+          <em>{moment(newsInfo.createdAt).format('YYYY-MM-DD hh:mm')}</em>
         </div>
       </div>
     );
-
     const loadMore =
       list.length > 0 ? (
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
+          <Button
+            onClick={this.fetchMore}
+            style={{ paddingLeft: 48, paddingRight: 48 }}
+          >
             {loading ? (
               <span>
                 <Icon type="loading" /> 加载中...
@@ -87,7 +113,11 @@ export default class Collection extends Component {
       <div>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
+            <StandardFormRow
+              title="所属类目"
+              block
+              style={{ paddingBottom: 11 }}
+            >
               <FormItem>
                 {getFieldDecorator('category')(
                   <TagSelect onChange={this.handleFormSubmit}>
@@ -105,13 +135,21 @@ export default class Collection extends Component {
             <StandardFormRow title="按标题搜索" grid last>
               <Row>
                 <Col lg={16} md={24} sm={24} xs={24}>
-                  <Input.Search placeholder="请输入" enterButton="搜索" onSearch={this.handleFormSubmit} />
+                  <Input.Search
+                    placeholder="请输入"
+                    enterButton="搜索"
+                    onSearch={this.handleFormSubmit}
+                  />
                 </Col>
               </Row>
             </StandardFormRow>
           </Form>
         </Card>
-        <Card style={{ marginTop: 24 }} bordered={false} bodyStyle={{ padding: '8px 32px 32px 32px' }}>
+        <Card
+          style={{ marginTop: 24 }}
+          bordered={false}
+          bodyStyle={{ padding: '8px 32px 32px 32px' }}
+        >
           <List
             size="large"
             loading={list.length === 0 ? loading : false}
@@ -121,11 +159,21 @@ export default class Collection extends Component {
             dataSource={list}
             renderItem={item => (
               <List.Item
-                key={item.id}
+                key={item.cID}
                 actions={[
-                  <IconText type="star-o" text={item.star} key="star" />,
-                  <IconText type="message" text={item.message} key="like" />,
-                  <Button type="danger" icon="delete" size="small" onClick={this.showDeleteConfirm.bind(this, item.id)} key="deleteConlection">
+                  <IconText type="star-o" text={item.starNum} key="starNum" />,
+                  <IconText
+                    type="message"
+                    text={item.commentNum}
+                    key="commentNum"
+                  />,
+                  <Button
+                    type="danger"
+                    icon="delete"
+                    size="small"
+                    onClick={this.showDeleteConfirm.bind(this, item.id)}
+                    key="deleteConlection"
+                  >
                     删除收藏
                   </Button>
                 ]}
@@ -134,12 +182,12 @@ export default class Collection extends Component {
                 <List.Item.Meta
                   title={
                     <a className={styles.listItemMetaTitle} href={item.href}>
-                      {item.title}
+                      {item.newsInfo.nTitle}
                     </a>
                   }
                   description={
                     <span>
-                      <Tag>科技</Tag>
+                      <Tag>{TYPE[item.newsInfo.nType]}</Tag>
                     </span>
                   }
                 />
