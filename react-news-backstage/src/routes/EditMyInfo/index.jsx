@@ -18,7 +18,6 @@ function getBase64(img, callback) {
 @Form.create()
 class EditMyInfo extends Component {
   state = {
-    confirmDirty: false,
     imageUrl: null
   };
   componentDidMount() {
@@ -54,7 +53,6 @@ class EditMyInfo extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        delete values.confirm;
         values.uAvatar = this.state.imageUrl;
         this.props.dispatch({
           type: 'user/editUserInfo',
@@ -64,25 +62,6 @@ class EditMyInfo extends Component {
         console.log(err);
       }
     });
-  };
-  handleConfirmBlur = e => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };
-  checkPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('uPasswd')) {
-      callback('你两次输入的密码需要保持一致');
-    } else {
-      callback();
-    }
-  };
-  checkConfirm = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
-    }
-    callback();
   };
   render() {
     const { submitting } = this.props;
@@ -140,7 +119,6 @@ class EditMyInfo extends Component {
                 className={styles['avatar-uploader']}
                 name="avatar"
                 showUploadList={false}
-                data={{ uID: currentUser.uID }}
                 action="//jsonplaceholder.typicode.com/posts/"
                 beforeUpload={this.beforeUpload}
               >

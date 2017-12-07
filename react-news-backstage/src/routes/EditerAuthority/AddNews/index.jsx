@@ -1,17 +1,46 @@
 import React, { PureComponent } from 'react';
-import { Form, Input, Upload, Select, Button, Card, Icon } from 'antd';
+import { Form, Input, Upload, Select, Button, Card, Icon, message } from 'antd';
+import { connect } from 'dva';
 import styles from './index.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const TextArea = Input.TextArea;
 
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+@connect(state => ({
+  user: state.user
+}))
 @Form.create()
-class BasicForms extends PureComponent {
+class AddNews extends PureComponent {
+  state = {
+    imageUrl: null
+  };
+  beforeUpload = file => {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    const isImg = file.type === 'image/png' || file.type === 'image/jpeg';
+    if (!isImg) {
+      message.error('你应该上传图片作为头像');
+    }
+    if (isImg && !isLt2M) {
+      message.error('你上传的图片大小不应超过2M');
+    }
+    if (isLt2M && isImg) {
+      getBase64(file, imageUrl => this.setState({ imageUrl }));
+    }
+    return false;
+  };
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values)
+        let currentUser = this.props.user.currentUser;
+        values.nImg = this.state.imageUrl;
+        values.uID = currentUser.uID;
+        console.log(values);
       }
     });
   };
@@ -41,7 +70,11 @@ class BasicForms extends PureComponent {
     return (
       <div>
         <Card bordered={false}>
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 24 }}>
+          <Form
+            onSubmit={this.handleSubmit}
+            hideRequiredMark
+            style={{ marginTop: 24 }}
+          >
             <FormItem {...formItemLayout} label="新闻标题" hasFeedback>
               {getFieldDecorator('nTitle', {
                 rules: [
@@ -73,23 +106,34 @@ class BasicForms extends PureComponent {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="新闻图片">
-              <div className={styles.dropbox}>
-                {getFieldDecorator('nImg', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: this.normFile
-                })(
-                  <Upload.Dragger name="nImg" action="/uploadNewsImg">
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
-                    </p>
-                    <p className="ant-upload-text">点击或者拖拽图片到这里</p>
-                    <p className="ant-upload-hint">目前仅支持上传单张图片</p>
-                  </Upload.Dragger>
+              <Upload
+                className={styles['avatar-uploader']}
+                name="avatar"
+                showUploadList={false}
+                action="//jsonplaceholder.typicode.com/posts/"
+                beforeUpload={this.beforeUpload}
+              >
+                {this.state.imageUrl ? (
+                  <img
+                    src={this.state.imageUrl}
+                    alt=""
+                    className={styles.avatar}
+                  />
+                ) : (
+                  <Icon
+                    type="plus"
+                    className={styles['avatar-uploader-trigger']}
+                  />
                 )}
-              </div>
+              </Upload>
             </FormItem>
             <FormItem {...formItemLayout} label="新闻内容" hasFeedback>
-              {getFieldDecorator('nContent')(<TextArea placeholder="在这里输入此条新闻的文字内容"  autosize={{ minRows: 4, maxRows: 1000 }}/>)}
+              {getFieldDecorator('nContent')(
+                <TextArea
+                  placeholder="在这里输入此条新闻的文字内容"
+                  autosize={{ minRows: 4, maxRows: 1000 }}
+                />
+              )}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 40 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
@@ -103,4 +147,4 @@ class BasicForms extends PureComponent {
   }
 }
 
-export default BasicForms;
+export default AddNews;
