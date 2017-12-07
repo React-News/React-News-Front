@@ -55,11 +55,17 @@ export default class Collection extends Component {
     this.props.form.validateFields({ force: true }, (err, values) => {
       if (!err) {
         const { form, user } = this.props;
-        console.log({
-          count: pageSize,
-          uID: user.currentUser.uID,
-          type: Array.isArray(checkedTags) ? checkedTags : form.getFieldValue('nType'),
-          keywd: form.getFieldValue('keywd') || ''
+        this.props.dispatch({
+          type: 'collection/initFetch',
+          payload: {
+            count: pageSize,
+            total: 0,
+            uID: user.currentUser.uID,
+            type: Array.isArray(checkedTags)
+              ? checkedTags
+              : form.getFieldValue('nType'),
+            keywd: form.getFieldValue('keywd') || ''
+          }
         });
       }
     });
@@ -74,6 +80,7 @@ export default class Collection extends Component {
         })
           .then(() => {
             message.success('收藏取消成功');
+            this.initFetch();
           })
           .catch(() => console.log('Oops errors!'));
       },
@@ -83,14 +90,14 @@ export default class Collection extends Component {
   checkType = (rule, value, callback) => {
     if (value.length === 0) {
       this.setState({
-        help: '你应该至少选择一个类目',
+        help: '你应该至少选择一个类目'
       });
       callback('error');
     } else {
       this.setState({
         help: ''
       });
-      callback()
+      callback();
     }
   };
   render() {
@@ -117,7 +124,10 @@ export default class Collection extends Component {
     const loadMore =
       list.length > 0 ? (
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
+          <Button
+            onClick={this.fetchMore}
+            style={{ paddingLeft: 48, paddingRight: 48 }}
+          >
             {loading ? (
               <span>
                 <Icon type="loading" /> 加载中...
@@ -133,7 +143,11 @@ export default class Collection extends Component {
       <div>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
+            <StandardFormRow
+              title="所属类目"
+              block
+              style={{ paddingBottom: 11 }}
+            >
               <FormItem help={this.state.help}>
                 {getFieldDecorator('nType', {
                   rules: [
