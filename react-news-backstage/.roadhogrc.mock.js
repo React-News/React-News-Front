@@ -48,7 +48,18 @@ const proxy = {
       }
     });
   },
+  // 获取收藏列表
   'GET /api/collectionList': getCollectionList,
+  // 添加新闻
+  'POST /api/addNews': (req, res) => {
+    res.send({
+      status: '200',
+      msg: '新闻添加成功',
+      data: {
+        nID: '1'
+      }
+    });
+  },
   'GET /api/rule': getRule,
   'POST /api/rule': {
     $params: {

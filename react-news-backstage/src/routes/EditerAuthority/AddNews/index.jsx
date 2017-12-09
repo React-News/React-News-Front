@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Form, Input, Upload, Select, Button, Card, Icon, message } from 'antd';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { addNews } from '../../../services/newsList';
 import styles from './index.less';
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -40,7 +42,15 @@ class AddNews extends PureComponent {
         let currentUser = this.props.user.currentUser;
         values.nImg = this.state.imageUrl;
         values.uID = currentUser.uID;
-        console.log(values);
+        addNews(values).then(res => {
+          console.log(res);
+          if (res.status === '200') {
+            message.success('你的新闻添加成功');
+            this.props.dispatch(routerRedux.push('/'));
+          } else {
+            message.error('你的新闻添加失败');
+          }
+        });
       }
     });
   };
@@ -70,11 +80,7 @@ class AddNews extends PureComponent {
     return (
       <div>
         <Card bordered={false}>
-          <Form
-            onSubmit={this.handleSubmit}
-            hideRequiredMark
-            style={{ marginTop: 24 }}
-          >
+          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 24 }}>
             <FormItem {...formItemLayout} label="新闻标题" hasFeedback>
               {getFieldDecorator('nTitle', {
                 rules: [
@@ -106,34 +112,12 @@ class AddNews extends PureComponent {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label="新闻图片">
-              <Upload
-                className={styles['avatar-uploader']}
-                name="avatar"
-                showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={this.beforeUpload}
-              >
-                {this.state.imageUrl ? (
-                  <img
-                    src={this.state.imageUrl}
-                    alt=""
-                    className={styles.avatar}
-                  />
-                ) : (
-                  <Icon
-                    type="plus"
-                    className={styles['avatar-uploader-trigger']}
-                  />
-                )}
+              <Upload className={styles['avatar-uploader']} name="avatar" showUploadList={false} action="//jsonplaceholder.typicode.com/posts/" beforeUpload={this.beforeUpload}>
+                {this.state.imageUrl ? <img src={this.state.imageUrl} alt="" className={styles.avatar} /> : <Icon type="plus" className={styles['avatar-uploader-trigger']} />}
               </Upload>
             </FormItem>
             <FormItem {...formItemLayout} label="新闻内容" hasFeedback>
-              {getFieldDecorator('nContent')(
-                <TextArea
-                  placeholder="在这里输入此条新闻的文字内容"
-                  autosize={{ minRows: 4, maxRows: 1000 }}
-                />
-              )}
+              {getFieldDecorator('nContent')(<TextArea placeholder="在这里输入此条新闻的文字内容" autosize={{ minRows: 4, maxRows: 1000 }} />)}
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 40 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
