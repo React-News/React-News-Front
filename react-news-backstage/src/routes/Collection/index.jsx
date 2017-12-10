@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input, Modal, message } from 'antd';
+import { Form, Card, List, Tag, Icon, Avatar, Row, Col, Button, Input, Modal, message, BackTop } from 'antd';
 import { TYPE } from '../../utils/utils';
 import StandardFormRow from '../../components/StandardFormRow';
 import TagSelect from '../../components/TagSelect';
@@ -61,9 +61,7 @@ export default class Collection extends Component {
             count: pageSize,
             total: 0,
             uID: user.currentUser.uID,
-            type: Array.isArray(checkedTags)
-              ? checkedTags
-              : form.getFieldValue('nType'),
+            type: Array.isArray(checkedTags) ? checkedTags : form.getFieldValue('nType'),
             keywd: form.getFieldValue('keywd') || ''
           }
         });
@@ -124,10 +122,7 @@ export default class Collection extends Component {
     const loadMore =
       list.length > 0 ? (
         <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <Button
-            onClick={this.fetchMore}
-            style={{ paddingLeft: 48, paddingRight: 48 }}
-          >
+          <Button onClick={this.fetchMore} style={{ paddingLeft: 48, paddingRight: 48 }}>
             {loading ? (
               <span>
                 <Icon type="loading" /> 加载中...
@@ -143,11 +138,7 @@ export default class Collection extends Component {
       <div>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow
-              title="所属类目"
-              block
-              style={{ paddingBottom: 11 }}
-            >
+            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
               <FormItem help={this.state.help}>
                 {getFieldDecorator('nType', {
                   rules: [
@@ -215,6 +206,7 @@ export default class Collection extends Component {
             )}
           />
         </Card>
+        <BackTop />
       </div>
     );
   }

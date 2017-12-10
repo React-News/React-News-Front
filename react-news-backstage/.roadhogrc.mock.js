@@ -1,6 +1,7 @@
 import mockjs from 'mockjs';
 import { getRule, postRule } from './mock/rule';
 import { getFakeList, getCollectionList } from './mock/api';
+import { getFakeNewsList } from './mock/newsList';
 import { getFakeChartData } from './mock/chart';
 import { imgMap } from './mock/utils';
 import { getProfileBasicData } from './mock/profile';
@@ -60,6 +61,8 @@ const proxy = {
       }
     });
   },
+  // 获取新闻列表
+  'GET /api/newsList': getFakeNewsList,
   'GET /api/rule': getRule,
   'POST /api/rule': {
     $params: {

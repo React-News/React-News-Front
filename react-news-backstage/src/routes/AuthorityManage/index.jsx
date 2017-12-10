@@ -267,7 +267,7 @@ export default class TableList extends PureComponent {
   render() {
     const { rule: { loading: ruleLoading, data } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
-
+    console.log(data)
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
