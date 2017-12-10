@@ -30,15 +30,26 @@ export default class DeleteNews extends PureComponent {
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
 
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      ...this.state.formValues
+      ...formValues,
+      ...filters
     };
-
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    console.log(params);
     dispatch({
-      type: 'rule/fetch',
+      type: 'newsList/fetch',
       payload: params
     });
   };
@@ -46,28 +57,6 @@ export default class DeleteNews extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form layout="inline">
-        <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
-          <FormItem help={this.state.help}>
-            {getFieldDecorator('nType', {
-              rules: [
-                {
-                  validator: this.checkType
-                }
-              ],
-              initialValue: ['SPORT', 'TECH', 'SOCIETY', 'FINANCE', 'GAME', 'CAR', 'OTHER']
-            })(
-              <TagSelect onChange={this.handleFormSubmit} expandable>
-                <TagSelect.Option value="SPORT">体育</TagSelect.Option>
-                <TagSelect.Option value="TECH">科技</TagSelect.Option>
-                <TagSelect.Option value="SOCIETY">社会</TagSelect.Option>
-                <TagSelect.Option value="FINANCE">财经</TagSelect.Option>
-                <TagSelect.Option value="GAME">游戏</TagSelect.Option>
-                <TagSelect.Option value="CAR">汽车</TagSelect.Option>
-                <TagSelect.Option value="OTHER">其他</TagSelect.Option>
-              </TagSelect>
-            )}
-          </FormItem>
-        </StandardFormRow>
         <StandardFormRow title="按标题搜索" grid last>
           <Row>
             <Col lg={16} md={24} sm={24} xs={24}>
@@ -78,10 +67,9 @@ export default class DeleteNews extends PureComponent {
       </Form>
     );
   }
+
   render() {
-    const { newsList: { loading, list } } = this.props;
-    list.list = list;
-    list.pagination = { total: 46, pageSize: 10, current: 1 };
+    const { newsList: { loading, data } } = this.props;
     return (
       <div>
         <Card bordered={false}>
@@ -89,7 +77,7 @@ export default class DeleteNews extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable loading={loading} data={list} onChange={this.handleStandardTableChange} />
+            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} />
           </div>
         </Card>
       </div>

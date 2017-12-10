@@ -1,11 +1,11 @@
 import request from '../utils/request';
 import { stringify } from 'qs';
 export async function query(params) {
-  return request(`/api/newsList${stringify(params)}`);
+  return request(`/api/newsList?${stringify(params)}`);
 }
 
 export async function queryNewsDetail(params) {
-  return request(`/api/newsDitail${stringify(params)}`);
+  return request(`/api/newsDitail?${stringify(params)}`);
 }
 
 export async function addNews(params) {

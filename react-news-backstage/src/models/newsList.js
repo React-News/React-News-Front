@@ -5,6 +5,10 @@ export default {
 
   state: {
     list: [],
+    data: {
+      list: [],
+      pagination: {}
+    },
     loading: false
   },
 
@@ -29,7 +33,14 @@ export default {
     save(state, action) {
       return {
         ...state,
-        list: action.payload
+        data: {
+          list: action.payload.list,
+          pagination: {
+            total: parseInt(action.payload.total),
+            pageSize: parseInt(action.payload.pageSize),
+            current: parseInt(action.payload.currentPage)
+          }
+        }
       };
     },
     changeLoading(state, action) {

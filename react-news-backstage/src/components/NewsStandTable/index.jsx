@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { Table, Button, Modal, Tag, message } from 'antd';
+import { Table, Button, Modal, Tag, message, Input } from 'antd';
 import { TYPE } from '../../utils/utils';
 import styles from './index.less';
 
@@ -8,7 +8,6 @@ const confirm = Modal.confirm;
 
 class NewsStandTable extends PureComponent {
   state = {};
-
   handleTableChange = (pagination, filters, sorter) => {
     this.props.onChange(pagination, filters, sorter);
   };
@@ -48,6 +47,15 @@ class NewsStandTable extends PureComponent {
       {
         title: '新闻类别',
         dataIndex: 'nType',
+        filters: [
+          { text: TYPE['SPORT'], value: 'SPORT' },
+          { text: TYPE['TECH'], value: 'TECH' },
+          { text: TYPE['SOCIETY'], value: 'SOCIETY' },
+          { text: TYPE['FINANCE'], value: 'FINANCE' },
+          { text: TYPE['GAME'], value: 'GAME' },
+          { text: TYPE['CAR'], value: 'CAR' },
+          { text: TYPE['OTHER'], value: 'OTHER' }
+        ],
         render: val => <Tag>{TYPE[val]}</Tag>
       },
       {

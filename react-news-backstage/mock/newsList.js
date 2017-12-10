@@ -37,7 +37,6 @@ function fakeNewsList(count) {
       nTitle: titles[i % 8],
       nType: types[i % 7],
       nImg: covers[i % 4],
-      nContext: '示例文本～这是示例文本～示例文本～这是示例文本～示例文本～这是示例文本～示例文本～这是示例文本～',
       nCreatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
       createrInfo: {
         uID: `fake-user-${i}`,
@@ -58,12 +57,17 @@ export function getFakeNewsList(req, res, u) {
 
   const params = getUrlParams(url);
 
-  const count = params.count * 1 || 20;
-
+  const currentPage = params.currentPage || 1;
+  const pageSize = params.pageSize || 10;
   const result = {
     status: '200',
     msg: '获取新闻列表成功',
-    data: fakeNewsList(count)
+    data: {
+      total: 40,
+      pageSize: pageSize,
+      currentPage: currentPage,
+      list: fakeNewsList(pageSize)
+    }
   };
 
   if (res && res.json) {
