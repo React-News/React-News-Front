@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, Modal, message } from 'antd';
+import { Row, Col, Card, Form, Input, Button, Modal, message } from 'antd';
 import NewsStandTable from '../../../components/NewsStandTable';
 import StandardFormRow from '../../../components/StandardFormRow';
 import TagSelect from '../../../components/TagSelect';
@@ -16,10 +16,8 @@ const getValue = obj =>
   newsList: state.newsList
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class DeleteNews extends PureComponent {
   state = {
-    addInputValue: '',
-    selectedRows: [],
     formValues: {}
   };
 
@@ -32,67 +30,18 @@ export default class TableList extends PureComponent {
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
 
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters
+      ...this.state.formValues
     };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
 
     dispatch({
       type: 'rule/fetch',
       payload: params
     });
   };
-
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-
-    if (!selectedRows) return;
-
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'rule/remove',
-          payload: {
-            no: selectedRows.map(row => row.no).join(',')
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: []
-            });
-          }
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows
-    });
-  };
-
-  handleAddInput = e => {
-    this.setState({
-      addInputValue: e.target.value
-    });
-  };
-
   renderForm() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -129,10 +78,8 @@ export default class TableList extends PureComponent {
       </Form>
     );
   }
-
   render() {
     const { newsList: { loading, list } } = this.props;
-    const { selectedRows, addInputValue } = this.state;
     list.list = list;
     list.pagination = { total: 46, pageSize: 10, current: 1 };
     return (
@@ -140,9 +87,9 @@ export default class TableList extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableListForm}>{this.renderForm()}</div>
         </Card>
-        <Card bordered={false} style={{'marginTop': '24px'}}>
+        <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable selectedRows={selectedRows} loading={loading} data={list} onSelectRow={this.handleSelectRows} onChange={this.handleStandardTableChange} />
+            <NewsStandTable loading={loading} data={list} onChange={this.handleStandardTableChange} />
           </div>
         </Card>
       </div>

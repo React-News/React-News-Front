@@ -103,7 +103,7 @@ function fakeCollectionList(count) {
         nID: `fake-news-${i}`,
         nTitle: titles[i % 8],
         nType: types[i % 8],
-        createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
+        nCreatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
         desc:
           '段落示意：这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～'
       },

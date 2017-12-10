@@ -10,7 +10,22 @@ const titles = [
   'Vue',
   'Webpack'
 ];
-
+const avatars = [
+  'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
+  'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
+  'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png', // Ant Design
+  'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png', // Ant Design Pro
+  'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png', // Bootstrap
+  'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
+  'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
+  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png' // Webpack
+];
+const covers = [
+  'https://gw.alipayobjects.com/zos/rmsportal/HrxcVbrKnCJOZvtzSqjN.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/alaPpKWajEbIYEUvvVNf.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/RLwlKSYGSXGHuWSojyvp.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png'
+];
 const types = ['SPORT', 'TECH', 'SOCIETY', 'FINANCE', 'GAME', 'CAR', 'OTHER'];
 const user = ['付小小', '曲丽丽', '林东东', '周星星', '吴加好', '朱偏右', '鱼酱', '乐哥', '谭小仪', '仲尼'];
 
@@ -21,9 +36,13 @@ function fakeNewsList(count) {
       nID: `fake-list-${i}`,
       nTitle: titles[i % 8],
       nType: types[i % 7],
+      nImg: covers[i % 4],
+      nContext: '示例文本～这是示例文本～示例文本～这是示例文本～示例文本～这是示例文本～示例文本～这是示例文本～',
       nCreatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
       createrInfo: {
-        uName: user[i % 10]
+        uID: `fake-user-${i}`,
+        uName: user[i % 10],
+        uAvatar: avatars[i % 8]
       }
     });
   }

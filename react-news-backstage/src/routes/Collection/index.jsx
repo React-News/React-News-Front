@@ -115,7 +115,7 @@ export default class Collection extends Component {
         <div className={styles.extra}>
           <Avatar src={createrInfo.uAvatar} size="small" />
           {createrInfo.uName}
-          <em>{moment(newsInfo.createdAt).format('YYYY-MM-DD hh:mm')}</em>
+          <em>{moment(newsInfo.nCreatedAt).format('YYYY-MM-DD hh:mm')}</em>
         </div>
       </div>
     );

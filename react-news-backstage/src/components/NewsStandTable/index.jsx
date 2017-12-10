@@ -1,34 +1,13 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { Table, Button, Divider, Tag } from 'antd';
+import { Table, Button, Modal, Tag, message } from 'antd';
 import { TYPE } from '../../utils/utils';
 import styles from './index.less';
 
+const confirm = Modal.confirm;
+
 class NewsStandTable extends PureComponent {
-  state = {
-    totalCallNo: 0
-  };
-
-  componentWillReceiveProps(nextProps) {
-    // clean state
-    if (nextProps.selectedRows.length === 0) {
-      this.setState({
-        totalCallNo: 0
-      });
-    }
-  }
-
-  handleRowSelectChange = selectedRows => {
-    const totalCallNo = selectedRows.reduce((sum, val) => {
-      return sum + parseFloat(val.callNo, 10);
-    }, 0);
-
-    if (this.props.onSelectRow) {
-      this.props.onSelectRow(selectedRows);
-    }
-
-    this.setState({ totalCallNo });
-  };
+  state = {};
 
   handleTableChange = (pagination, filters, sorter) => {
     this.props.onChange(pagination, filters, sorter);
@@ -37,7 +16,22 @@ class NewsStandTable extends PureComponent {
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
   };
-
+  deleteNewsConfirm = nID => {
+    confirm({
+      title: '删除新闻',
+      content: '你真的要删除此条新闻吗？',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        })
+          .then(() => {
+            message.success(`新闻${nID}删除成功`);
+          })
+          .catch(() => console.log('Oops errors!'));
+      },
+      onCancel() {}
+    });
+  };
   render() {
     const { data: { list, pagination }, loading } = this.props;
 
@@ -49,7 +43,7 @@ class NewsStandTable extends PureComponent {
       {
         title: '新闻标题',
         dataIndex: 'nTitle',
-        render: val =>  <span style={{'fontWeight': 'bold'}}>{val}</span>
+        render: val => <span style={{ fontWeight: 'bold' }}>{val}</span>
       },
       {
         title: '新闻类别',
@@ -67,9 +61,9 @@ class NewsStandTable extends PureComponent {
       },
       {
         title: '操作',
-        render: () => (
+        render: (text, record) => (
           <div>
-            <Button type="danger" icon="delete">
+            <Button type="danger" icon="delete" onClick={this.deleteNewsConfirm.bind(this, record.nID)}>
               删除
             </Button>
           </div>
