@@ -13,25 +13,48 @@ const getValue = obj =>
     .join(',');
 
 @connect(state => ({
-  newsList: state.newsList
+  newsList: state.newsList,
+  user: state.user
 }))
 @Form.create()
 export default class DeleteNews extends PureComponent {
   state = {
-    formValues: {}
+    filteredInfo: {
+      nType: []
+    }
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'newsList/fetch'
+    this.reFetchNewsList();
+  }
+  handleFormSubmit = () => {
+    this.reFetchNewsList();
+  };
+  reFetchNewsList() {
+    const { user: { currentUser } } = this.props;
+    const { form } = this.props;
+    const filters = Object.keys(this.state.filteredInfo).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(this.state.filteredInfo[key]);
+      return newObj;
+    }, {});
+    this.props.dispatch({
+      type: 'newsList/fetch',
+      payload: {
+        uID: currentUser.uID,
+        currentPage: 1,
+        pageSize: 10,
+        keywd: form.getFieldValue('keywd') || '',
+        ...filters
+      }
     });
   }
-
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
+    const { user: { currentUser } } = this.props;
+    const { dispatch, form } = this.props;
+    this.setState({
+      filteredInfo: filtersArg
+    });
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -39,9 +62,10 @@ export default class DeleteNews extends PureComponent {
     }, {});
 
     const params = {
+      uID: currentUser.uID,
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      ...formValues,
+      keywd: form.getFieldValue('keywd') || '',
       ...filters
     };
     if (sorter.field) {
@@ -77,7 +101,7 @@ export default class DeleteNews extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} />
+            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} />
           </div>
         </Card>
       </div>
