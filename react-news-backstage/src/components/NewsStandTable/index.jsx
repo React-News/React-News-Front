@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { Table, Button, Modal, Tag, message, Input, Icon } from 'antd';
+import { Table, Button, Tag, message, Input, Icon } from 'antd';
 import { TYPE } from '../../utils/utils';
 import styles from './index.less';
-
-const confirm = Modal.confirm;
 
 class NewsStandTable extends PureComponent {
   state = {
@@ -13,9 +11,12 @@ class NewsStandTable extends PureComponent {
     filtered: false,
     typeArr: []
   };
-  onInputChange = (e) => {
-    this.setState({ searchText: e.target.value });
+  componentDidMount() {
+    console.log(this.renderActionBtn);
   }
+  onInputChange = e => {
+    this.setState({ searchText: e.target.value });
+  };
   onSearch = () => {
     const { data: { list } } = this.props;
     const { searchText } = this.state;
@@ -23,46 +24,40 @@ class NewsStandTable extends PureComponent {
     this.setState({
       filterDropdownVisible: false,
       filtered: !!searchText,
-      list: list.map((record) => {
-        const match = record.nTitle.match(reg);
-        if (!match) {
-          return null;
-        }
-        return {
-          ...record,
-          nTitle: (
-            <span>
-              {record.nTitle.split(reg).map((text, i) => (
-                i > 0 ? [<span key={record.nID} className={styles.highlight}>{match[0]}</span>, text] : text
-              ))}
-            </span>
-          ),
-        };
-      }).filter(record => !!record),
+      list: list
+        .map(record => {
+          const match = record.nTitle.match(reg);
+          if (!match) {
+            return null;
+          }
+          return {
+            ...record,
+            nTitle: (
+              <span>
+                {record.nTitle.split(reg).map(
+                  (text, i) =>
+                    i > 0
+                      ? [
+                          <span key={record.nID} className={styles.highlight}>
+                            {match[0]}
+                          </span>,
+                          text
+                        ]
+                      : text
+                )}
+              </span>
+            )
+          };
+        })
+        .filter(record => !!record)
     });
-  }
+  };
   handleTableChange = (pagination, filters, sorter) => {
     this.props.onChange(pagination, filters, sorter);
   };
 
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
-  };
-  deleteNewsConfirm = nID => {
-    confirm({
-      title: '删除新闻',
-      content: '你真的要删除此条新闻吗？',
-      onOk() {
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        })
-          .then(() => {
-            message.success(`新闻${nID}删除成功`);
-          })
-          .catch(() => console.log('Oops errors!'));
-      },
-      onCancel() {}
-    });
   };
   render() {
     const { data: { list, pagination }, loading } = this.props;
@@ -128,13 +123,7 @@ class NewsStandTable extends PureComponent {
       {
         title: '操作',
         key: 'action',
-        render: (text, record) => (
-          <div>
-            <Button type="danger" icon="delete" onClick={this.deleteNewsConfirm.bind(this, record.nID)}>
-              删除
-            </Button>
-          </div>
-        )
+        render: (text, record) => <div>{this.props.actionBtn(record)}</div>
       }
     ];
 
@@ -146,7 +135,14 @@ class NewsStandTable extends PureComponent {
 
     return (
       <div className={styles.standardTable}>
-        <Table loading={loading} rowKey={record => record.nID} dataSource={this.state.list || list} columns={columns} pagination={paginationProps} onChange={this.handleTableChange} />
+        <Table
+          loading={loading}
+          rowKey={record => record.nID}
+          dataSource={this.state.list || list}
+          columns={columns}
+          pagination={paginationProps}
+          onChange={this.handleTableChange}
+        />
       </div>
     );
   }

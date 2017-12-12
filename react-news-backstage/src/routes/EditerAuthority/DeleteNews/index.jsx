@@ -7,6 +7,8 @@ import TagSelect from '../../../components/TagSelect';
 import styles from './index.less';
 
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
+
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -91,7 +93,29 @@ export default class DeleteNews extends PureComponent {
       </Form>
     );
   }
-
+  renderActionBtn(record) {
+    const deleteNewsConfirm = nID => {
+      confirm({
+        title: '删除新闻',
+        content: '你真的要删除此条新闻吗？',
+        onOk() {
+          return new Promise((resolve, reject) => {
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          })
+            .then(() => {
+              message.success(`新闻${nID}删除成功`);
+            })
+            .catch(() => console.log('Oops errors!'));
+        },
+        onCancel() {}
+      });
+    };
+    return (
+      <Button type="danger" icon="delete" onClick={deleteNewsConfirm.bind(this, record.nID)}>
+        删除
+      </Button>
+    );
+  }
   render() {
     const { newsList: { loading, data } } = this.props;
     return (
@@ -101,7 +125,7 @@ export default class DeleteNews extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} />
+            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} />
           </div>
         </Card>
       </div>
