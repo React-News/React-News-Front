@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Row, Col, Card, Form, Input, Button, Modal, message } from 'antd';
-import NewsStandTable from '../../components/NewsStandTable';
+import NewsTable from '../../components/NewsTable';
 import StandardFormRow from '../../components/StandardFormRow';
 import { deleteNews } from '../../services/news';
 import styles from './index.less';
@@ -131,7 +131,7 @@ export default class DeleteNewsAdmin extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} reFetchData={this.reFetchNewsList.bind(this)} />
+            <NewsTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} reFetchData={this.reFetchNewsList.bind(this)} />
           </div>
         </Card>
       </div>

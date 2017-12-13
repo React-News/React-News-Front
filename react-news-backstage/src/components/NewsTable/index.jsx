@@ -4,7 +4,7 @@ import { Table, Button, Tag, message, Input, Icon } from 'antd';
 import { TYPE } from '../../utils/utils';
 import styles from './index.less';
 
-class NewsStandTable extends PureComponent {
+class NewsTable extends PureComponent {
   state = {
     filterDropdownVisible: false,
     searchText: '',
@@ -145,4 +145,4 @@ class NewsStandTable extends PureComponent {
   }
 }
 
-export default NewsStandTable;
+export default NewsTable;
