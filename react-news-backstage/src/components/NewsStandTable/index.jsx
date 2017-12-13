@@ -11,9 +11,6 @@ class NewsStandTable extends PureComponent {
     filtered: false,
     typeArr: []
   };
-  componentDidMount() {
-    console.log(this.renderActionBtn);
-  }
   onInputChange = e => {
     this.setState({ searchText: e.target.value });
   };
@@ -123,7 +120,7 @@ class NewsStandTable extends PureComponent {
       {
         title: '操作',
         key: 'action',
-        render: (text, record) => <div>{this.props.actionBtn(record)}</div>
+        render: (text, record) => <div>{this.props.actionBtn(record, this.props.reFetchData)}</div>
       }
     ];
 

@@ -63,6 +63,16 @@ const proxy = {
   },
   // 获取新闻列表
   'GET /api/newsList': getFakeNewsList,
+  // 删除新闻
+  'POST /api/deleteNews': (req, res) => {
+    res.send({
+      status: '200',
+      msg: '新闻删除成功',
+      data: {
+        nID: '1'
+      }
+    });
+  },
   'GET /api/rule': getRule,
   'POST /api/rule': {
     $params: {

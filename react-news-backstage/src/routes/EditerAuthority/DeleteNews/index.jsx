@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { Row, Col, Card, Form, Input, Button, Modal, message } from 'antd';
 import NewsStandTable from '../../../components/NewsStandTable';
 import StandardFormRow from '../../../components/StandardFormRow';
-import TagSelect from '../../../components/TagSelect';
+import { deleteNews } from '../../../services/newsList';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -93,19 +94,27 @@ export default class DeleteNews extends PureComponent {
       </Form>
     );
   }
-  renderActionBtn(record) {
+  renderActionBtn(record, reFetchNewsList) {
     const deleteNewsConfirm = nID => {
       confirm({
         title: '删除新闻',
         content: '你真的要删除此条新闻吗？',
         onOk() {
+          let params = {
+            nID: nID
+          };
           return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          })
-            .then(() => {
-              message.success(`新闻${nID}删除成功`);
-            })
-            .catch(() => console.log('Oops errors!'));
+            return deleteNews(params).then(res => {
+              console.log(res);
+              if (res.status === '200') {
+                message.success('此条新闻删除成功');
+                reFetchNewsList();
+                resolve();
+              } else {
+                reject();
+              }
+            });
+          }).catch(() => message.error('此条新闻删除失败'));
         },
         onCancel() {}
       });
@@ -125,7 +134,7 @@ export default class DeleteNews extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} />
+            <NewsStandTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} reFetchData={this.reFetchNewsList.bind(this)} />
           </div>
         </Card>
       </div>
