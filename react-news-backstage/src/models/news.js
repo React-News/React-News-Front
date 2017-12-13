@@ -1,7 +1,7 @@
-import { query as queryNewsList } from '../services/newsList';
+import { query as queryNewsList } from '../services/news';
 
 export default {
-  namespace: 'newsList',
+  namespace: 'news',
 
   state: {
     list: [],

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Form, Input, Upload, Select, Button, Card, Icon, message } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { addNews } from '../../../services/newsList';
+import { addNews } from '../../../services/news';
 import styles from './index.less';
 const FormItem = Form.Item;
 const { Option } = Select;

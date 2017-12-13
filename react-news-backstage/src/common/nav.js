@@ -200,7 +200,7 @@ export const getNavData = app => [
           {
             name: '删除新闻',
             path: 'delete-news',
-            component: dynamicWrapper(app, ['newsList'], import('../routes/EditerAuthority/DeleteNews'))
+            component: dynamicWrapper(app, ['news'], import('../routes/EditerAuthority/DeleteNews'))
           }
         ]
       },
@@ -214,7 +214,7 @@ export const getNavData = app => [
         name: '删除新闻',
         path: 'delete-news-admin',
         icon: 'delete',
-        component: dynamicWrapper(app, ['newsList'], import('../routes/DeleteNews'))
+        component: dynamicWrapper(app, ['news'], import('../routes/DeleteNews'))
       },
       {
         name: '用户列表',

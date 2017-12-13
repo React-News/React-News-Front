@@ -4,7 +4,7 @@ import { routerRedux } from 'dva/router';
 import { Row, Col, Card, Form, Input, Button, Modal, message } from 'antd';
 import NewsStandTable from '../../components/NewsStandTable';
 import StandardFormRow from '../../components/StandardFormRow';
-import { deleteNews } from '../../services/newsList';
+import { deleteNews } from '../../services/news';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -16,7 +16,7 @@ const getValue = obj =>
     .join(',');
 
 @connect(state => ({
-  newsList: state.newsList
+  news: state.news
 }))
 @Form.create()
 export default class DeleteNewsAdmin extends PureComponent {
@@ -40,7 +40,7 @@ export default class DeleteNewsAdmin extends PureComponent {
       return newObj;
     }, {});
     this.props.dispatch({
-      type: 'newsList/fetch',
+      type: 'news/fetch',
       payload: {
         uID: '',
         currentPage: 1,
@@ -73,7 +73,7 @@ export default class DeleteNewsAdmin extends PureComponent {
     }
     console.log(params);
     dispatch({
-      type: 'newsList/fetch',
+      type: 'news/fetch',
       payload: params
     });
   };
@@ -123,7 +123,7 @@ export default class DeleteNewsAdmin extends PureComponent {
     );
   }
   render() {
-    const { newsList: { loading, data } } = this.props;
+    const { news: { loading, data } } = this.props;
     return (
       <div>
         <Card bordered={false}>
