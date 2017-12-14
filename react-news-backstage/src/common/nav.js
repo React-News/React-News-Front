@@ -220,7 +220,7 @@ export const getNavData = app => [
         name: '用户列表',
         path: 'user-list',
         icon: 'user',
-        component: dynamicWrapper(app, ['rule'], import('../routes/UserList'))
+        component: dynamicWrapper(app, [], import('../routes/UserList'))
       }
     ]
   },

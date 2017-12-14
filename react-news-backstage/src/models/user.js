@@ -5,22 +5,25 @@ export default {
   namespace: 'user',
 
   state: {
-    list: [],
+    listData: {
+      list: [],
+      pagination: {}
+    },
     loading: false,
     editUserInfoStatus: '400',
     currentUser: {}
   },
 
   effects: {
-    *fetch(_, { call, put }) {
+    *fetch({ payload }, { call, put }) {
       yield put({
         type: 'changeLoading',
         payload: true
       });
-      const response = yield call(queryUsers);
+      const response = yield call(queryUsers, payload);
       yield put({
         type: 'save',
-        payload: response
+        payload: response.data
       });
       yield put({
         type: 'changeLoading',
@@ -62,7 +65,14 @@ export default {
     save(state, action) {
       return {
         ...state,
-        list: action.payload
+        listData: {
+          list: action.payload.list,
+          pagination: {
+            total: parseInt(action.payload.total),
+            pageSize: parseInt(action.payload.pageSize),
+            current: parseInt(action.payload.currentPage)
+          }
+        }
       };
     },
     changeLoading(state, action) {

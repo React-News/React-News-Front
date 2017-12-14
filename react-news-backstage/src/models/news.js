@@ -4,7 +4,6 @@ export default {
   namespace: 'news',
 
   state: {
-    list: [],
     data: {
       list: [],
       pagination: {}

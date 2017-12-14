@@ -1,7 +1,7 @@
 import request from '../utils/request';
-// import { stringify } from 'qs';
-export async function query() {
-  return request('/api/users');
+import { stringify } from 'qs';
+export async function query(params) {
+  return request(`/api/users?${stringify(params)}`);
 }
 
 export async function queryCurrent() {
