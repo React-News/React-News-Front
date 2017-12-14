@@ -23,7 +23,7 @@ function fakeUserList(count) {
       uName: userName[i % 8],
       uSex: sex[i % 3],
       uAge: Math.ceil(Math.random(i) * 100),
-      uAuthority: authority[i % 4],
+      uType: authority[i % 2],
       uAvatar: avatars[i % 8]
     });
   }

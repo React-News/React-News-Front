@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Row, Col, Card, Form, Input, Button, Modal, message } from 'antd';
+import { Row, Col, Card, Form, Input, Switch, Modal, message } from 'antd';
 import NewsTable from '../../components/UserTable';
 import StandardFormRow from '../../components/StandardFormRow';
 import { deleteNews } from '../../services/news';
@@ -40,7 +40,7 @@ export default class UserList extends PureComponent {
       return newObj;
     }, {});
     this.props.dispatch({
-      type: 'news/fetch',
+      type: 'user/fetch',
       payload: {
         uID: '',
         currentPage: 1,
@@ -73,7 +73,7 @@ export default class UserList extends PureComponent {
     }
     console.log(params);
     dispatch({
-      type: 'news/fetch',
+      type: 'user/fetch',
       payload: params
     });
   };
@@ -81,10 +81,19 @@ export default class UserList extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form layout="inline">
-        <StandardFormRow title="按标题搜索" grid last>
+        <StandardFormRow title="按用户名搜索" grid last>
           <Row>
             <Col lg={16} md={24} sm={24} xs={24}>
-              <FormItem>{getFieldDecorator('keywd')(<Input.Search placeholder="请输入" enterButton="搜索" onSearch={this.handleFormSubmit} style={{ width: '100%' }} />)}</FormItem>
+              <FormItem>
+                {getFieldDecorator('keywd')(
+                  <Input.Search
+                    placeholder="请输入"
+                    enterButton="搜索"
+                    onSearch={this.handleFormSubmit}
+                    style={{ width: '100%' }}
+                  />
+                )}
+              </FormItem>
             </Col>
           </Row>
         </StandardFormRow>
@@ -92,13 +101,13 @@ export default class UserList extends PureComponent {
     );
   }
   renderActionBtn(record, reFetchNewsList) {
-    const deleteNewsConfirm = nID => {
+    const deleteNewsConfirm = uID => {
       confirm({
         title: '删除新闻',
         content: '你真的要删除此条新闻吗？',
         onOk() {
           let params = {
-            nID: nID
+            uID: uID
           };
           return new Promise((resolve, reject) => {
             return deleteNews(params).then(res => {
@@ -116,14 +125,23 @@ export default class UserList extends PureComponent {
         onCancel() {}
       });
     };
+    const changeUserType = (checked) => {
+      console.log(checked, record);
+      
+    };
     return (
-      <Button type="danger" icon="delete" onClick={deleteNewsConfirm.bind(this, record.nID)}>
-        删除
-      </Button>
+      <div>
+        <Switch
+          checkedChildren="编辑用户"
+          unCheckedChildren="普通用户"
+          defaultChecked={record.uType === 'EDITOR'}
+          onChange={changeUserType}
+        />
+      </div>
     );
   }
   render() {
-    const { user: { loading, data } } = this.props;
+    const { user: { loading, listData } } = this.props;
     return (
       <div>
         <Card bordered={false}>
@@ -131,7 +149,14 @@ export default class UserList extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} reFetchData={this.reFetchNewsList.bind(this)} />
+            <NewsTable
+              loading={loading}
+              data={listData}
+              onChange={this.handleStandardTableChange}
+              filteredInfo={this.state.filteredInfo}
+              actionBtn={this.renderActionBtn}
+              reFetchData={this.reFetchNewsList.bind(this)}
+            />
           </div>
         </Card>
       </div>

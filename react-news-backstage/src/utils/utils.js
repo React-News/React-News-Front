@@ -112,3 +112,15 @@ export const TYPE = {
   CAR: '汽车',
   OTHER: '其他'
 };
+
+export const SEX = {
+  MALE: '男',
+  FEMALE: '女',
+  OTHER: '其他'
+};
+
+export const AUTHORITY = {
+  NORMAL: '普通用户',
+  EDITOR: '编辑用户',
+  ADMIN: '管理员'
+};

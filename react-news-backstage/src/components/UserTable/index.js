@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { Table, Button, Tag, message, Input, Icon } from 'antd';
-import { TYPE } from '../../utils/utils';
+import { SEX, AUTHORITY } from '../../utils/utils';
 import styles from './index.less';
 
 class NewsTable extends PureComponent {
@@ -23,19 +23,19 @@ class NewsTable extends PureComponent {
       filtered: !!searchText,
       list: list
         .map(record => {
-          const match = record.nTitle.match(reg);
+          const match = record.uName.match(reg);
           if (!match) {
             return null;
           }
           return {
             ...record,
-            nTitle: (
+            uName: (
               <span>
-                {record.nTitle.split(reg).map(
+                {record.uName.split(reg).map(
                   (text, i) =>
                     i > 0
                       ? [
-                          <span key={record.nID} className={styles.highlight}>
+                          <span key={record.uID} className={styles.highlight}>
                             {match[0]}
                           </span>,
                           text
@@ -62,24 +62,35 @@ class NewsTable extends PureComponent {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: '新闻ID',
-        key: 'nID',
-        dataIndex: 'nID'
+        title: '用户ID',
+        key: 'uID',
+        dataIndex: 'uID'
       },
       {
-        title: '新闻标题',
-        key: 'nTitle',
-        dataIndex: 'nTitle',
+        title: '用户名',
+        key: 'uName',
+        dataIndex: 'uName',
         render: val => <span style={{ fontWeight: 'bold' }}>{val}</span>,
         filterDropdown: (
           <div className={styles['custom-filter-dropdown']}>
-            <Input ref={ele => (this.searchInput = ele)} placeholder="Search name" value={this.state.searchText} onChange={this.onInputChange} onPressEnter={this.onSearch} />
+            <Input
+              ref={ele => (this.searchInput = ele)}
+              placeholder="Search name"
+              value={this.state.searchText}
+              onChange={this.onInputChange}
+              onPressEnter={this.onSearch}
+            />
             <Button type="primary" onClick={this.onSearch}>
               Search
             </Button>
           </div>
         ),
-        filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
+        filterIcon: (
+          <Icon
+            type="search"
+            style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }}
+          />
+        ),
         filterDropdownVisible: this.state.filterDropdownVisible,
         onFilterDropdownVisibleChange: visible => {
           this.setState(
@@ -91,36 +102,39 @@ class NewsTable extends PureComponent {
         }
       },
       {
-        title: '新闻类别',
-        key: 'nType',
-        dataIndex: 'nType',
+        title: '性别',
+        key: 'uSex',
+        dataIndex: 'uSex',
         filters: [
-          { text: TYPE['SPORT'], value: 'SPORT' },
-          { text: TYPE['TECH'], value: 'TECH' },
-          { text: TYPE['SOCIETY'], value: 'SOCIETY' },
-          { text: TYPE['FINANCE'], value: 'FINANCE' },
-          { text: TYPE['GAME'], value: 'GAME' },
-          { text: TYPE['CAR'], value: 'CAR' },
-          { text: TYPE['OTHER'], value: 'OTHER' }
+          { text: SEX['MALE'], value: 'MALE' },
+          { text: SEX['FEMALE'], value: 'FEMALE' },
+          { text: SEX['OTHER'], value: 'OTHER' }
         ],
-        filteredValue: filteredInfo.nType || null,
-        render: val => <Tag>{TYPE[val]}</Tag>
+        filteredValue: filteredInfo.uSex || null,
+        render: val => <Tag>{SEX[val]}</Tag>
       },
       {
-        title: '创建人',
-        key: 'uName',
-        dataIndex: 'createrInfo.uName'
+        title: '年龄',
+        key: 'uAge',
+        dataIndex: 'uAge'
       },
       {
-        title: '创建日期',
-        key: 'nCreatedAt',
-        dataIndex: 'nCreatedAt',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>
+        title: '权限',
+        key: 'uType',
+        dataIndex: 'uType',
+        filters: [
+          { text: AUTHORITY['NORMAL'], value: 'NORMAL' },
+          { text: AUTHORITY['EDITOR'], value: 'EDITOR' }
+        ],
+        filteredValue: filteredInfo.uAuthority || null,
+        render: val => <Tag>{AUTHORITY[val]}</Tag>
       },
       {
         title: '操作',
         key: 'action',
-        render: (text, record) => <div>{this.props.actionBtn(record, this.props.reFetchData)}</div>
+        render: (text, record) => (
+          <div>{this.props.actionBtn(record, this.props.reFetchData)}</div>
+        )
       }
     ];
 
@@ -134,7 +148,7 @@ class NewsTable extends PureComponent {
       <div className={styles.standardTable}>
         <Table
           loading={loading}
-          rowKey={record => record.nID}
+          rowKey={record => record.uID}
           dataSource={this.state.list || list}
           columns={columns}
           pagination={paginationProps}
