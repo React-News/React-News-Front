@@ -112,7 +112,7 @@ class EditMyInfo extends Component {
               {getFieldDecorator('uAge', {
                 rules: [{ required: true, message: '请输入你的年龄' }],
                 initialValue: currentUser.uAge
-              })(<InputNumber min={1} max={100} style={{ width: '100%' }} />)}
+              })(<InputNumber min={1} max={100} style={{ width: '100%' }} precision={0.1} />)}
             </FormItem>
             <FormItem {...formItemLayout} label="更改头像">
               <Upload

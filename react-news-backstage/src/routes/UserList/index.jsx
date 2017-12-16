@@ -4,7 +4,7 @@ import { routerRedux } from 'dva/router';
 import { Row, Col, Card, Form, Input, Switch, Modal, message } from 'antd';
 import NewsTable from '../../components/UserTable';
 import StandardFormRow from '../../components/StandardFormRow';
-import { deleteNews } from '../../services/news';
+import { editUserType } from '../../services/user';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -40,7 +40,7 @@ export default class UserList extends PureComponent {
       newObj[key] = getValue(this.state.filteredInfo[key]);
       return newObj;
     }, {});
-    console.log(filters)
+    console.log(filters);
     this.props.dispatch({
       type: 'user/fetch',
       payload: {
@@ -93,7 +93,20 @@ export default class UserList extends PureComponent {
   }
   renderActionBtn(record, reFetchNewsList) {
     const changeUserType = checked => {
-      console.log(checked, record);
+      let params = {
+        uID: record.uID,
+        uType: checked ? 'EDITOR' : 'NORMAL'
+      };
+      editUserType(params)
+        .then(res => {
+          if (res.status === '200') {
+            message.success('用户权限修改成功');
+            reFetchNewsList();
+          } else {
+            message.error('用户权限修改失败');
+          }
+        })
+        .catch();
     };
     return (
       <div>

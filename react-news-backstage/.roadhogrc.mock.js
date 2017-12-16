@@ -50,6 +50,13 @@ const proxy = {
       }
     });
   },
+  // 修改用户权限
+  'POST /api/editUserType': (req, res) => {
+    res.send({
+      status: '200',
+      msg: '修改用户权限成功'
+    });
+  },
   // 获取用户列表
   'GET /api/users': getFakeUserList,
   // 获取收藏列表
