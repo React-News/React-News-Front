@@ -22,7 +22,8 @@ const getValue = obj =>
 export default class UserList extends PureComponent {
   state = {
     filteredInfo: {
-      nType: []
+      uSex: [],
+      uType: []
     }
   };
 
@@ -39,10 +40,10 @@ export default class UserList extends PureComponent {
       newObj[key] = getValue(this.state.filteredInfo[key]);
       return newObj;
     }, {});
+    console.log(filters)
     this.props.dispatch({
       type: 'user/fetch',
       payload: {
-        uID: '',
         currentPage: 1,
         pageSize: 10,
         keywd: form.getFieldValue('keywd') || '',
@@ -62,7 +63,6 @@ export default class UserList extends PureComponent {
     }, {});
 
     const params = {
-      uID: '',
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
       keywd: form.getFieldValue('keywd') || '',
@@ -84,16 +84,7 @@ export default class UserList extends PureComponent {
         <StandardFormRow title="按用户名搜索" grid last>
           <Row>
             <Col lg={16} md={24} sm={24} xs={24}>
-              <FormItem>
-                {getFieldDecorator('keywd')(
-                  <Input.Search
-                    placeholder="请输入"
-                    enterButton="搜索"
-                    onSearch={this.handleFormSubmit}
-                    style={{ width: '100%' }}
-                  />
-                )}
-              </FormItem>
+              <FormItem>{getFieldDecorator('keywd')(<Input.Search placeholder="请输入" enterButton="搜索" onSearch={this.handleFormSubmit} style={{ width: '100%' }} />)}</FormItem>
             </Col>
           </Row>
         </StandardFormRow>
@@ -101,42 +92,12 @@ export default class UserList extends PureComponent {
     );
   }
   renderActionBtn(record, reFetchNewsList) {
-    const deleteNewsConfirm = uID => {
-      confirm({
-        title: '删除新闻',
-        content: '你真的要删除此条新闻吗？',
-        onOk() {
-          let params = {
-            uID: uID
-          };
-          return new Promise((resolve, reject) => {
-            return deleteNews(params).then(res => {
-              console.log(res);
-              if (res.status === '200') {
-                message.success('此条新闻删除成功');
-                reFetchNewsList();
-                resolve();
-              } else {
-                reject();
-              }
-            });
-          }).catch(() => message.error('此条新闻删除失败'));
-        },
-        onCancel() {}
-      });
-    };
-    const changeUserType = (checked) => {
+    const changeUserType = checked => {
       console.log(checked, record);
-      
     };
     return (
       <div>
-        <Switch
-          checkedChildren="编辑用户"
-          unCheckedChildren="普通用户"
-          defaultChecked={record.uType === 'EDITOR'}
-          onChange={changeUserType}
-        />
+        <Switch checkedChildren="编辑用户" unCheckedChildren="普通用户" defaultChecked={record.uType === 'EDITOR'} onChange={changeUserType} />
       </div>
     );
   }

@@ -134,7 +134,14 @@ export default class DeleteNews extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginTop: '24px' }}>
           <div className={styles.tableList}>
-            <NewsTable loading={loading} data={data} onChange={this.handleStandardTableChange} filteredInfo={this.state.filteredInfo} actionBtn={this.renderActionBtn} reFetchData={this.reFetchNewsList.bind(this)} />
+            <NewsTable
+              loading={loading}
+              data={data}
+              onChange={this.handleStandardTableChange}
+              filteredInfo={this.state.filteredInfo}
+              actionBtn={this.renderActionBtn}
+              reFetchData={this.reFetchNewsList.bind(this)}
+            />
           </div>
         </Card>
       </div>

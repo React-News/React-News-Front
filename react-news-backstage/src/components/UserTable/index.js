@@ -126,7 +126,7 @@ class NewsTable extends PureComponent {
           { text: AUTHORITY['NORMAL'], value: 'NORMAL' },
           { text: AUTHORITY['EDITOR'], value: 'EDITOR' }
         ],
-        filteredValue: filteredInfo.uAuthority || null,
+        filteredValue: filteredInfo.uType || null,
         render: val => <Tag>{AUTHORITY[val]}</Tag>
       },
       {
