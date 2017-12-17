@@ -67,6 +67,11 @@ class NewsTable extends PureComponent {
         dataIndex: 'uID'
       },
       {
+        title: '手机号',
+        key: 'uTelNum',
+        dataIndex: 'uTelNum'
+      },
+      {
         title: '用户名',
         key: 'uName',
         dataIndex: 'uName',

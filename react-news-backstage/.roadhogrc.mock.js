@@ -121,7 +121,6 @@ const proxy = {
         uPasswd: 'passwordishere'
       }
     });
-    // res.send({ status: '400', msg: '注册失败' });
   }
 };
 

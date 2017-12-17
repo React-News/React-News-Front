@@ -93,7 +93,12 @@ class EditMyInfo extends Component {
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 24 }}>
             <FormItem {...formItemLayout} label="昵称" hasFeedback>
               {getFieldDecorator('uName', {
-                rules: [{ required: true, message: '请输入你的昵称' }, { pattern: /^\S+$/, message: '请使用非空字符作为你的昵称' }],
+                rules: [
+                  { required: true, message: '请输入你的昵称' },
+                  { pattern: /^\S+$/, message: '请使用非空字符作为你的昵称' },
+                  { max: 10, message: '你的昵称不能超过10个字符' },
+                  { min: 2, message: '你的昵称不能少于2个' }
+                ],
                 initialValue: currentUser.uName
               })(<Input />)}
             </FormItem>
@@ -115,13 +120,7 @@ class EditMyInfo extends Component {
               })(<InputNumber min={1} max={100} style={{ width: '100%' }} precision={0.1} />)}
             </FormItem>
             <FormItem {...formItemLayout} label="更改头像">
-              <Upload
-                className={styles['avatar-uploader']}
-                name="avatar"
-                showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={this.beforeUpload}
-              >
+              <Upload className={styles['avatar-uploader']} name="avatar" showUploadList={false} action="//jsonplaceholder.typicode.com/posts/" beforeUpload={this.beforeUpload}>
                 {imageUrl ? <img src={imageUrl} alt="" className={styles.avatar} /> : <Icon type="plus" className={styles['avatar-uploader-trigger']} />}
               </Upload>
             </FormItem>
