@@ -1,41 +1,26 @@
-import { queryCollectionList } from '../services/api';
+import { query as queryCollectionList } from '../services/collection';
 
 export default {
   namespace: 'collection',
 
   state: {
-    list: [],
+    data: {
+      list: [],
+      pagination: {}
+    },
     loading: false
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      yield console.log('fetch', payload);
       yield put({
         type: 'changeLoading',
         payload: true
       });
       const response = yield call(queryCollectionList, payload);
-      yield console.log(response);
       yield put({
-        type: 'appendList',
-        payload: Array.isArray(response.data) ? response.data : []
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false
-      });
-    },
-    *initFetch({ payload }, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true
-      });
-      const response = yield call(queryCollectionList, payload);
-      yield console.log(response);
-      yield put({
-        type: 'replaceList',
-        payload: Array.isArray(response.data) ? response.data : []
+        type: 'save',
+        payload: response.data
       });
       yield put({
         type: 'changeLoading',
@@ -43,18 +28,18 @@ export default {
       });
     }
   },
-
   reducers: {
-    appendList(state, action) {
+    save(state, action) {
       return {
         ...state,
-        list: state.list.concat(action.payload)
-      };
-    },
-    replaceList(state, action) {
-      return {
-        ...state,
-        list: action.payload
+        data: {
+          list: action.payload.list,
+          pagination: {
+            total: parseInt(action.payload.total),
+            pageSize: parseInt(action.payload.pageSize),
+            current: parseInt(action.payload.currentPage)
+          }
+        }
       };
     },
     changeLoading(state, action) {

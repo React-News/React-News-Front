@@ -98,14 +98,12 @@ function fakeCollectionList(count) {
   const list = [];
   for (let i = 0; i < count; i++) {
     list.push({
-      cID: `fake-list-${i}`,
+      cID: `fake-collection-${i}`,
       newsInfo: {
         nID: `fake-news-${i}`,
         nTitle: titles[i % 8],
-        nType: types[i % 8],
-        nCreatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i),
-        desc:
-          '段落示意：这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～这是一条实例新闻～很有趣对吧～'
+        nType: types[i % 7],
+        nCreatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i)
       },
       createrInfo: {
         uID: `fake-user-${i}`,
@@ -146,12 +144,17 @@ export function getCollectionList(req, res, u) {
 
   const params = getUrlParams(url);
 
-  const count = params.count * 1 || 20;
-
+  const currentPage = params.currentPage || 1;
+  const pageSize = params.pageSize || 10;
   const result = {
     status: '200',
     msg: '获取收藏列表成功',
-    data: fakeCollectionList(count)
+    data: {
+      total: 40,
+      pageSize: pageSize,
+      currentPage: currentPage,
+      list: fakeCollectionList(pageSize)
+    }
   };
 
   if (res && res.json) {

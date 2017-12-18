@@ -59,8 +59,6 @@ const proxy = {
   },
   // 获取用户列表
   'GET /api/users': getFakeUserList,
-  // 获取收藏列表
-  'GET /api/collectionList': getCollectionList,
   // 添加新闻
   'POST /api/addNews': (req, res) => {
     res.send({
@@ -80,6 +78,29 @@ const proxy = {
       msg: '新闻删除成功',
       data: {
         nID: '1'
+      }
+    });
+  },
+  // 获取收藏列表
+  'GET /api/collectionList': getCollectionList,
+  // 添加收藏
+  'POST /api/addCollection': (req, res) => {
+    const { uID, nID } = req.body;
+    res.send({
+      status: '200',
+      msg: '添加收藏成功',
+      data: {
+        cID: `${uID}-${nID}`
+      }
+    });
+  },
+  // 删除收藏
+  'POST /api/deleteCollection': (req, res) => {
+    res.send({
+      status: '200',
+      msg: '收藏删除成功',
+      data: {
+        cID: '1'
       }
     });
   },

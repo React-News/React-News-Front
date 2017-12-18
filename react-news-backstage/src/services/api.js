@@ -77,9 +77,3 @@ export async function register(params) {
 export async function queryNotices() {
   return request('/api/notices');
 }
-
-// 下面是我写的
-
-export async function queryCollectionList(params) {
-  return request(`/api/collectionList?${stringify(params)}`);
-}
