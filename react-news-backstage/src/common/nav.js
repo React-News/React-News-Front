@@ -254,13 +254,22 @@ export const getNavData = app => [
     ]
   },
   {
-    component: dynamicWrapper(app, [], import('../layouts/BlankLayout')),
-    layout: 'BlankLayout',
-    children: {
-      name: '使用文档',
-      path: 'http://pro.ant.design/docs/getting-started',
-      target: '_blank',
-      icon: 'book'
-    }
+    component: dynamicWrapper(app, [], import('../layouts/IndexLayout')),
+    path: '/index',
+    layout: 'IndexLayout',
+    children: [
+      {
+        name: '展示页',
+        icon: 'user',
+        path: 'index',
+        children: [
+          {
+            name: '注册结果',
+            path: 'index',
+            component: dynamicWrapper(app, [], import('../routes/Index'))
+          }
+        ]
+      }
+    ]
   }
 ];
