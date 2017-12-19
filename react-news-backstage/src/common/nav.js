@@ -13,134 +13,9 @@ export const getNavData = app => [
   {
     component: dynamicWrapper(app, ['user'], import('../layouts/BasicLayout')),
     layout: 'BasicLayout',
-    name: '首页', // for breadcrumb
-    path: '/',
+    name: 'Dashboard', // for breadcrumb
+    path: '/dashboard',
     children: [
-      {
-        name: 'Dashboard',
-        icon: 'dashboard',
-        path: 'dashboard',
-        children: [
-          {
-            name: '分析页',
-            path: 'analysis',
-            component: dynamicWrapper(app, ['chart'], import('../routes/Dashboard/Analysis'))
-          },
-          {
-            name: '监控页',
-            path: 'monitor',
-            component: dynamicWrapper(app, ['monitor'], import('../routes/Dashboard/Monitor'))
-          },
-          {
-            name: '工作台',
-            path: 'workplace',
-            component: dynamicWrapper(app, ['project', 'activities', 'chart'], import('../routes/Dashboard/Workplace'))
-          }
-        ]
-      },
-      {
-        name: '表单页',
-        path: 'form',
-        icon: 'form',
-        children: [
-          {
-            name: '基础表单',
-            path: 'basic-form',
-            component: dynamicWrapper(app, ['form'], import('../routes/Forms/BasicForm'))
-          },
-          {
-            name: '分步表单',
-            path: 'step-form',
-            component: dynamicWrapper(app, ['form'], import('../routes/Forms/StepForm')),
-            children: [
-              {
-                path: 'confirm',
-                component: dynamicWrapper(app, ['form'], import('../routes/Forms/StepForm/Step2'))
-              },
-              {
-                path: 'result',
-                component: dynamicWrapper(app, ['form'], import('../routes/Forms/StepForm/Step3'))
-              }
-            ]
-          },
-          {
-            name: '高级表单',
-            path: 'advanced-form',
-            component: dynamicWrapper(app, ['form'], import('../routes/Forms/AdvancedForm'))
-          }
-        ]
-      },
-      {
-        name: '列表页',
-        path: 'list',
-        icon: 'table',
-        children: [
-          {
-            name: '查询表格',
-            path: 'table-list',
-            component: dynamicWrapper(app, ['rule'], import('../routes/List/TableList'))
-          },
-          {
-            name: '标准列表',
-            path: 'basic-list',
-            component: dynamicWrapper(app, ['list'], import('../routes/List/BasicList'))
-          },
-          {
-            name: '卡片列表',
-            path: 'card-list',
-            component: dynamicWrapper(app, ['list'], import('../routes/List/CardList'))
-          },
-          {
-            name: '搜索列表（项目）',
-            path: 'cover-card-list',
-            component: dynamicWrapper(app, ['list'], import('../routes/List/CoverCardList'))
-          },
-          {
-            name: '搜索列表（应用）',
-            path: 'filter-card-list',
-            component: dynamicWrapper(app, ['list'], import('../routes/List/FilterCardList'))
-          },
-          {
-            name: '搜索列表（文章）',
-            path: 'search',
-            component: dynamicWrapper(app, ['list'], import('../routes/List/SearchList'))
-          }
-        ]
-      },
-      {
-        name: '详情页',
-        path: 'profile',
-        icon: 'profile',
-        children: [
-          {
-            name: '基础详情页',
-            path: 'basic',
-            component: dynamicWrapper(app, ['profile'], import('../routes/Profile/BasicProfile'))
-          },
-          {
-            name: '高级详情页',
-            path: 'advanced',
-            component: dynamicWrapper(app, ['profile'], import('../routes/Profile/AdvancedProfile'))
-          }
-        ]
-      },
-      {
-        name: '结果',
-        path: 'result',
-        icon: 'check-circle-o',
-        children: [
-          {
-            name: '成功',
-            path: 'success',
-            component: dynamicWrapper(app, [], import('../routes/Result/Success'))
-          },
-          {
-            name: '失败',
-            path: 'fail',
-            component: dynamicWrapper(app, [], import('../routes/Result/Error'))
-          }
-        ]
-      },
       {
         name: '异常',
         path: 'exception',
@@ -165,31 +40,25 @@ export const getNavData = app => [
       },
       {
         name: '修改个人信息',
-        path: 'edit-my-info',
+        path: '/dashboard/edit-my-info',
         icon: 'edit',
         component: dynamicWrapper(app, [], import('../routes/EditMyInfo'))
       },
       {
         name: '我的收藏',
-        path: 'my-collection',
+        path: '/dashboard/my-collection',
         icon: 'star',
         component: dynamicWrapper(app, ['collection'], import('../routes/Collection'))
       },
       {
-        name: '查看历史',
-        path: 'watch-history',
-        icon: 'eye',
-        component: dynamicWrapper(app, ['list'], import('../routes/WatchHistory'))
-      },
-      {
         name: '我的评论',
-        path: 'my-comment',
+        path: '/dashboard/my-comment',
         icon: 'message',
         component: dynamicWrapper(app, ['list'], import('../routes/MyComment'))
       },
       {
         name: '编辑特权',
-        path: 'editer-authority',
+        path: '/dashboard/editer-authority',
         icon: 'contacts',
         children: [
           {
@@ -205,20 +74,14 @@ export const getNavData = app => [
         ]
       },
       {
-        name: '权限管理',
-        path: 'authority-manage',
-        icon: 'api',
-        component: dynamicWrapper(app, ['rule'], import('../routes/AuthorityManage'))
-      },
-      {
         name: '删除新闻',
-        path: 'delete-news-admin',
+        path: '/dashboard/delete-news-admin',
         icon: 'delete',
         component: dynamicWrapper(app, ['news'], import('../routes/DeleteNews'))
       },
       {
         name: '用户列表',
-        path: 'user-list',
+        path: '/dashboard/user-list',
         icon: 'user',
         component: dynamicWrapper(app, [], import('../routes/UserList'))
       }
@@ -255,17 +118,17 @@ export const getNavData = app => [
   },
   {
     component: dynamicWrapper(app, ['user'], import('../layouts/IndexLayout')),
-    path: '/index',
+    path: '/',
     layout: 'IndexLayout',
     children: [
       {
         name: '展示页',
         icon: 'user',
-        path: 'index',
+        path: '/',
         children: [
           {
-            name: '注册结果',
-            path: 'index',
+            name: '首页',
+            path: '/',
             component: dynamicWrapper(app, [], import('../routes/Index'))
           }
         ]

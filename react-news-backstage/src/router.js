@@ -55,9 +55,9 @@ function RouterConfig({ history, app }) {
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
-          <Route path="/index" render={props => <IndexLayout {...props} {...passProps} />} />
           <Route path="/user" render={props => <UserLayout {...props} {...passProps} />} />
-          <Route path="/" render={props => <BasicLayout {...props} {...passProps} />} />
+          <Route path="/dashboard" render={props => <BasicLayout {...props} {...passProps} />} />
+          <Route path="/" render={props => <IndexLayout {...props} {...passProps} />} />
         </Switch>
       </Router>
     </LocaleProvider>

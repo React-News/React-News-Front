@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Link, Route } from 'dva/router';
+import { routerRedux, Route, Link } from 'dva/router';
 import { Menu, Layout, Icon, Dropdown, Button, Avatar } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -47,6 +47,11 @@ class IndexLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object
   };
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'user/fetchCurrent'
+    });
+  }
   getChildContext() {
     const { location } = this.props;
     return { location };
@@ -65,6 +70,8 @@ class IndexLayout extends React.PureComponent {
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
       this.props.dispatch({ type: 'login/logout' });
+    } else if (key === 'dashboard') {
+      this.props.dispatch(routerRedux.push('/dashboard/my-collection'));
     }
   };
   render() {
@@ -113,9 +120,11 @@ class IndexLayout extends React.PureComponent {
                       </span>
                     </Dropdown>
                   ) : (
-                    <Button ghost>
-                      <Icon type="login" />登录／注册
-                    </Button>
+                    <Link to="/user/login">
+                      <Button ghost>
+                        <Icon type="login" />登录／注册
+                      </Button>
+                    </Link>
                   )}
                 </div>
               </Menu>

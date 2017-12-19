@@ -28,7 +28,7 @@ class EditMyInfo extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.editUserInfoStatus === '200') {
-      this.props.dispatch(routerRedux.push('/'));
+      this.props.dispatch(routerRedux.push('/dashboard/my-collection'));
       this.props.dispatch({
         type: 'user/initEditUserInfo'
       });

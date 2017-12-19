@@ -46,7 +46,7 @@ class AddNews extends PureComponent {
           console.log(res);
           if (res.status === '200') {
             message.success('你的新闻添加成功');
-            this.props.dispatch(routerRedux.push('/'));
+            this.props.dispatch(routerRedux.push('/dashboard/editer-authority/delete-news'));
           } else {
             message.error('你的新闻添加失败');
           }

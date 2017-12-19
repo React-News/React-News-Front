@@ -95,13 +95,13 @@ export default class Collection extends PureComponent {
     );
   }
   renderActionBtn(record, reFetchNewsList) {
-    const deleteNewsConfirm = nID => {
+    const deleteNewsConfirm = cID => {
       confirm({
         title: '取消收藏',
         content: '你真的要取消此条新闻的收藏吗？',
         onOk() {
           let params = {
-            cID: nID
+            cID: cID
           };
           return new Promise((resolve, reject) => {
             return deleteCollection(params).then(res => {
@@ -120,7 +120,7 @@ export default class Collection extends PureComponent {
       });
     };
     return (
-      <Button type="danger" icon="delete" onClick={deleteNewsConfirm.bind(this, record.nID)}>
+      <Button type="danger" icon="delete" onClick={deleteNewsConfirm.bind(this, record.cID)}>
         删除
       </Button>
     );
