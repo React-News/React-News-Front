@@ -254,7 +254,7 @@ export const getNavData = app => [
     ]
   },
   {
-    component: dynamicWrapper(app, [], import('../layouts/IndexLayout')),
+    component: dynamicWrapper(app, ['user'], import('../layouts/IndexLayout')),
     path: '/index',
     layout: 'IndexLayout',
     children: [

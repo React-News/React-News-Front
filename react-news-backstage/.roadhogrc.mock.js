@@ -146,4 +146,3 @@ const proxy = {
 };
 
 export default (noProxy ? {} : delay(format(proxy), 1000));
-// export default {}

@@ -44,10 +44,7 @@ class BasicLayout extends React.PureComponent {
   constructor(props) {
     super(props);
     // 把一级 Layout 的 children 作为菜单项
-    this.menus = props.navData.reduce(
-      (arr, current) => arr.concat(current.children),
-      []
-    );
+    this.menus = props.navData.reduce((arr, current) => arr.concat(current.children), []);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props)
     };
@@ -55,10 +52,7 @@ class BasicLayout extends React.PureComponent {
   getChildContext() {
     const { location, navData, getRouteData } = this.props;
     const routeData = getRouteData('BasicLayout');
-    const firstMenuData = navData.reduce(
-      (arr, current) => arr.concat(current.children),
-      []
-    );
+    const firstMenuData = navData.reduce((arr, current) => arr.concat(current.children), []);
     const menuData = this.getMenuData(firstMenuData, '');
     const breadcrumbNameMap = {};
 
@@ -93,9 +87,7 @@ class BasicLayout extends React.PureComponent {
     data.forEach(item => {
       if (item.children) {
         arr.push({ path: `${parentPath}/${item.path}`, name: item.name });
-        arr = arr.concat(
-          this.getMenuData(item.children, `${parentPath}/${item.path}`)
-        );
+        arr = arr.concat(this.getMenuData(item.children, `${parentPath}/${item.path}`));
       }
     });
     return arr;
@@ -159,11 +151,7 @@ class BasicLayout extends React.PureComponent {
               <span>{item.name}</span>
             </a>
           ) : (
-            <Link
-              to={itemPath}
-              target={item.target}
-              replace={itemPath === this.props.location.pathname}
-            >
+            <Link to={itemPath} target={item.target} replace={itemPath === this.props.location.pathname}>
               {icon}
               <span>{item.name}</span>
             </Link>
@@ -185,10 +173,7 @@ class BasicLayout extends React.PureComponent {
   }
   handleOpenChange = openKeys => {
     const lastOpenKey = openKeys[openKeys.length - 1];
-    const isMainMenu = this.menus.some(
-      item =>
-        lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
-    );
+    const isMainMenu = this.menus.some(item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey));
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys]
     });
@@ -226,11 +211,7 @@ class BasicLayout extends React.PureComponent {
     const { currentUser, collapsed, getRouteData } = this.props;
 
     const menu = (
-      <Menu
-        className={styles.menu}
-        selectedKeys={[]}
-        onClick={this.onMenuClick}
-      >
+      <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="logout">
           <Icon type="logout" />退出登录
         </Menu.Item>
@@ -246,15 +227,7 @@ class BasicLayout extends React.PureComponent {
 
     const layout = (
       <Layout>
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-          breakpoint="md"
-          onCollapse={this.onCollapse}
-          width={256}
-          className={styles.sider}
-        >
+        <Sider trigger={null} collapsible collapsed={collapsed} breakpoint="md" onCollapse={this.onCollapse} width={256} className={styles.sider}>
           <div className={styles.logo}>
             <Link to="/">
               <img src={logo} alt="logo" />
@@ -274,20 +247,12 @@ class BasicLayout extends React.PureComponent {
         </Sider>
         <Layout>
           <Header className={styles.header}>
-            <Icon
-              className={styles.trigger}
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
+            <Icon className={styles.trigger} type={collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle} />
             <div className={styles.right}>
               {currentUser.uName ? (
                 <Dropdown overlay={menu}>
                   <span className={`${styles.action} ${styles.account}`}>
-                    <Avatar
-                      size="small"
-                      className={styles.avatar}
-                      src={currentUser.uAvatar}
-                    />
+                    <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} />
                     {currentUser.uName}
                   </span>
                 </Dropdown>
@@ -298,22 +263,14 @@ class BasicLayout extends React.PureComponent {
           </Header>
           <Content style={{ margin: '24px 24px 0', height: '100%' }}>
             <Switch>
-              {getRouteData('BasicLayout').map(item => (
-                <Route
-                  exact={item.exact}
-                  key={item.path}
-                  path={item.path}
-                  component={item.component}
-                />
-              ))}
+              {getRouteData('BasicLayout').map(item => <Route exact={item.exact} key={item.path} path={item.path} component={item.component} />)}
               <Redirect exact from="/" to="/my-collection" />
               <Route component={NotFound} />
             </Switch>
             <GlobalFooter
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017
-                  React-News体验技术部出品
+                  Copyright <Icon type="copyright" /> 2017 React-News体验技术部出品
                 </div>
               }
             />
@@ -324,9 +281,7 @@ class BasicLayout extends React.PureComponent {
 
     return (
       <DocumentTitle title={this.getPageTitle()}>
-        <ContainerQuery query={query}>
-          {params => <div className={classNames(params)}>{layout}</div>}
-        </ContainerQuery>
+        <ContainerQuery query={query}>{params => <div className={classNames(params)}>{layout}</div>}</ContainerQuery>
       </DocumentTitle>
     );
   }

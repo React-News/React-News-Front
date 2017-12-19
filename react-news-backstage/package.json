@@ -19,8 +19,8 @@
     "test:all": "node ./tests/run-tests.js"
   },
   "dependencies": {
-    "acorn-dynamic-import": "^2.0.2",
     "antd": "^3.0.1",
+    "babel-eslint": "^8.0.3",
     "babel-runtime": "^6.9.2",
     "classnames": "^2.2.5",
     "core-js": "^2.5.1",
@@ -36,10 +36,10 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.5.10",
     "qs": "^6.5.0",
-    "react": "^16.2.0",
+    "react": "^16.0.0",
     "react-container-query": "^0.9.1",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.0.0",
     "react-fittext": "^1.0.0",
     "watchpack": "^1.4.0"
   },
@@ -84,14 +84,27 @@
     "nightmare": "^2.10.0"
   },
   "babel": {
-    "presets": ["env", "react"],
-    "plugins": ["transform-decorators-legacy", "transform-class-properties"]
+    "presets": [
+      "env",
+      "react"
+    ],
+    "plugins": [
+      "transform-decorators-legacy",
+      "transform-class-properties"
+    ]
   },
   "jest": {
-    "setupFiles": ["<rootDir>/tests/setupTests.js"],
-    "testMatch": ["**/?(*.)(spec|test|e2e).js?(x)"],
+    "setupFiles": [
+      "<rootDir>/tests/setupTests.js"
+    ],
+    "testMatch": [
+      "**/?(*.)(spec|test|e2e).js?(x)"
+    ],
     "setupTestFrameworkScriptFile": "<rootDir>/tests/jasmine.js",
-    "moduleFileExtensions": ["js", "jsx"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/tests/styleMock.js"
     }

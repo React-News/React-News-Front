@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'dva';
 import { Link, Route } from 'dva/router';
-import { Menu, Layout, Icon } from 'antd';
+import { Menu, Layout, Icon, Dropdown, Button, Avatar } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import DocumentTitle from 'react-document-title';
@@ -27,18 +28,20 @@ const links = [
 
 const copyright = (
   <div>
-    Copyright <Icon type="copyright" /> 2017 React-News体验技术部出品
+    Copyright
+    <Icon type="copyright" />
+    2017 React-News体验技术部出品
   </div>
 );
 
 const renderTypeMenuItem = () => {
   let list = [];
-  for(let key in TYPE) {
-    list.push(<Menu.Item key={key}>{TYPE[key]}</Menu.Item>)
+  for (let key in TYPE) {
+    list.push(<Menu.Item key={key}>{TYPE[key]}</Menu.Item>);
   }
-  console.log(list)
+  console.log(list);
   return list;
-}
+};
 
 class IndexLayout extends React.PureComponent {
   static childContextTypes = {
@@ -59,8 +62,24 @@ class IndexLayout extends React.PureComponent {
     });
     return title;
   }
+  onMenuClick = ({ key }) => {
+    if (key === 'logout') {
+      this.props.dispatch({ type: 'login/logout' });
+    }
+  };
   render() {
-    const { getRouteData } = this.props;
+    const { getRouteData, currentUser } = this.props;
+    console.log(this.props);
+    const menu = (
+      <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
+        <Menu.Item key="dashboard">
+          <Icon type="dashboard" />Dashboard
+        </Menu.Item>
+        <Menu.Item key="logout">
+          <Icon type="logout" />退出登录
+        </Menu.Item>
+      </Menu>
+    );
     return (
       <DocumentTitle title={this.getPageTitle()}>
         <div className={styles.container}>
@@ -69,18 +88,36 @@ class IndexLayout extends React.PureComponent {
               <div className={styles['logo-wrapper']}>
                 <img src={logo} alt="logo" className={styles.logo} />
               </div>
-              <Menu theme="dark" mode="horizontal" style={{ lineHeight: '64px' }}>
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                style={{
+                  lineHeight: '64px'
+                }}
+              >
                 <SubMenu
                   key="sort"
                   title={
                     <span>
-                      <Icon type="api" />
-                      <span>分类</span>
+                      <Icon type="api" /> <span> 分类 </span>
                     </span>
                   }
                 >
                   {renderTypeMenuItem()}
                 </SubMenu>
+                <div className={styles.right}>
+                  {currentUser.uName ? (
+                    <Dropdown overlay={menu}>
+                      <span className={`${styles.action} ${styles.account}`}>
+                        <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} /> {currentUser.uName}
+                      </span>
+                    </Dropdown>
+                  ) : (
+                    <Button ghost>
+                      <Icon type="login" />登录／注册
+                    </Button>
+                  )}
+                </div>
               </Menu>
             </Header>
           </div>
@@ -91,5 +128,4 @@ class IndexLayout extends React.PureComponent {
     );
   }
 }
-
-export default IndexLayout;
+export default connect(state => ({ currentUser: state.user.currentUser }))(IndexLayout);
