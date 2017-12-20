@@ -1,0 +1,58 @@
+@import '~antd/lib/style/themes/default.less';
+.container {
+  padding: 60px 10px 0 10px;
+  overflow: hidden;
+}
+
+.sortTitle {
+  display: block;
+  border-color: #9a58b5;
+  font-size: 40px;
+  line-height: 40px;
+  font-family: 'Guardian Text Sans', sans-serif !important;
+  font-weight: 700;
+  :before {
+    content: '';
+    display: block;
+    width: 30px;
+    border-top-width: 3px;
+  }
+}
+
+.newsList {
+  :global {
+    .ant-list-item-meta-title {
+      color: #2b2d32;
+      font-size: 22px;
+      line-height: 25px;
+      font-family: 'Helvetica Neue', 'Helvetica', 'Nimbus Sans L', 'Arial', 'Liberation Sans', 'Hiragino Sans GB', 'Microsoft YaHei', 'Wenquanyi Micro Hei', 'WenQuanYi Zen Hei', 'ST Heiti', 'SimHei', 'WenQuanYi Zen Hei Sharp', sans-serif;
+      font-weight: 400;
+    }
+  }
+}
+
+.listExtra {
+  color: @text-color-secondary;
+  margin-top: 16px;
+  line-height: 22px;
+  & > :global(.ant-avatar) {
+    vertical-align: top;
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 1px;
+  }
+  & > em {
+    color: @disabled-color;
+    font-style: normal;
+  }
+}
+
+.imgResponsive {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 300px;
+  display: block;
+}

@@ -33,13 +33,27 @@ const copyright = (
     2017 React-News体验技术部出品
   </div>
 );
-
-const renderTypeMenuItem = () => {
+const refreshNewsList = (dispatch, nType) => {
+  console.log(nType)
+  dispatch({
+    type: 'news/fetch',
+    payload: {
+      uID: '',
+      currentPage: 1,
+      pageSize: 10,
+      keywd: '',
+      nType: nType
+    }
+  });
+};
+const renderTypeMenuItem = dispatch => {
   let list = [];
   for (let key in TYPE) {
     list.push(
-      <Menu.Item key={key}>
-        <Link to={`/${key}`}>{TYPE[key]} </Link>
+      <Menu.Item key={key} onClick={refreshNewsList.bind(this,dispatch, key)}>
+        <Link to={`/${key}`}>
+          {TYPE[key]}
+        </Link>
       </Menu.Item>
     );
   }
@@ -79,8 +93,6 @@ class IndexLayout extends React.PureComponent {
   };
   render() {
     const { getRouteData, currentUser } = this.props;
-    console.log(getRouteData('IndexLayout'));
-    console.log(this.props, this.props.match.nType);
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="dashboard">
@@ -116,7 +128,7 @@ class IndexLayout extends React.PureComponent {
                     </span>
                   }
                 >
-                  {renderTypeMenuItem()}
+                  {renderTypeMenuItem(this.props.dispatch)}
                 </SubMenu>
                 <div className={styles.right}>
                   {currentUser.uName ? (

@@ -129,17 +129,17 @@ export const getNavData = app => [
           {
             name: '首页',
             path: '/',
-            component: dynamicWrapper(app, [], import('../routes/Index'))
+            component: dynamicWrapper(app, ['news'], import('../routes/Index'))
           },
           {
             name: 'newsList',
             path: '/:nType',
-            component: dynamicWrapper(app, [], import('../routes/UserList'))
+            component: dynamicWrapper(app, ['news'], import('../routes/Index'))
           },
           {
             name: '详情页',
             path: '/newsDetail/:nID',
-            component: dynamicWrapper(app, [], import('../routes/Index'))
+            component: dynamicWrapper(app, [], import('../routes/newsDetail'))
           }
         ]
       }
