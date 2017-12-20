@@ -37,9 +37,12 @@ const copyright = (
 const renderTypeMenuItem = () => {
   let list = [];
   for (let key in TYPE) {
-    list.push(<Menu.Item key={key}>{TYPE[key]}</Menu.Item>);
+    list.push(
+      <Menu.Item key={key}>
+        <Link to={`/${key}`}>{TYPE[key]} </Link>
+      </Menu.Item>
+    );
   }
-  console.log(list);
   return list;
 };
 
@@ -76,7 +79,8 @@ class IndexLayout extends React.PureComponent {
   };
   render() {
     const { getRouteData, currentUser } = this.props;
-    console.log(this.props);
+    console.log(getRouteData('IndexLayout'));
+    console.log(this.props, this.props.match.nType);
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="dashboard">
@@ -93,7 +97,9 @@ class IndexLayout extends React.PureComponent {
           <div className={styles.top}>
             <Header className={styles.header}>
               <div className={styles['logo-wrapper']}>
-                <img src={logo} alt="logo" className={styles.logo} />
+                <Link to="/">
+                  <img src={logo} alt="logo" className={styles.logo} />
+                </Link>
               </div>
               <Menu
                 theme="dark"
