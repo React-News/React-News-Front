@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { List, Avatar, Icon, Row, Col, Tag } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
@@ -8,6 +9,21 @@ import { TYPE } from '../../utils/utils';
   news: state.news
 }))
 export default class Index extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.nType !== nextProps.match.params.nType) {
+      console.log(this.props.match.params.nType, nextProps.match.params.nType);
+      this.props.dispatch({
+        type: 'news/fetch',
+        payload: {
+          uID: '',
+          currentPage: 1,
+          pageSize: 10,
+          keywd: '',
+          nType: nextProps.match.params.nType
+        }
+      });
+    }
+  }
   componentDidMount() {
     let nType = this.props.match.params.nType || '';
     this.props.dispatch({
@@ -21,6 +37,20 @@ export default class Index extends Component {
       }
     });
   }
+  onChangePagination = pagination => {
+    const { dispatch } = this.props;
+    console.log(pagination);
+    const params = {
+      uID: '',
+      currentPage: pagination,
+      pageSize: 10
+    };
+    console.log(params);
+    dispatch({
+      type: 'news/fetch',
+      payload: params
+    });
+  };
 
   render() {
     const IconText = ({ type, text }) => (
@@ -31,7 +61,11 @@ export default class Index extends Component {
     );
     const { news: { loading, data } } = this.props;
     let { nType } = this.props.match.params;
-    console.log(this.props);
+
+    const newPagination = {
+      ...data.pagination,
+      onChange: this.onChangePagination
+    };
     return (
       <div className={styles.container}>
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
@@ -44,7 +78,7 @@ export default class Index extends Component {
             <List
               itemLayout="vertical"
               size="large"
-              pagination={data.pagination}
+              pagination={newPagination}
               dataSource={data.list}
               loading={loading}
               className={styles.newsList}
@@ -56,7 +90,7 @@ export default class Index extends Component {
                 >
                   <span className={styles.listExtra}>
                     <Avatar src={item.createrInfo.uAvatar} size="small" />
-                    {item.createrInfo.uName} 发布于 <em>{moment(item.nCreatedAt).format('YYYY-MM-DD hh:mm')}</em>
+                    {item.createrInfo.uName} 发布于 <em>{moment(item.nCreatedAt).fromNow()}</em>
                   </span>
 
                   <List.Item.Meta

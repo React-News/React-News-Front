@@ -32,10 +32,12 @@ export default {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response.data
-      });
+      if (response) {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response.data
+        });
+      }
     },
     *initEditUserInfo(_, { call, put }) {
       yield put({

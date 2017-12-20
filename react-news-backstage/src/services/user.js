@@ -6,7 +6,10 @@ export async function query(params) {
 
 export async function queryCurrent() {
   let uID = sessionStorage.getItem('uID');
-  return request(`/api/userInfo?uID=${uID}`);
+  if (uID) {
+    return request(`/api/userInfo?uID=${uID}`);
+  }
+  return null;
 }
 // 实际上是在改自己的信息 0.0
 export async function editUserInfo(params) {

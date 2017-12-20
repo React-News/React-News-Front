@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux, Route, Link } from 'dva/router';
 import { Menu, Layout, Icon, Dropdown, Button, Avatar } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
+const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 import DocumentTitle from 'react-document-title';
 import GlobalFooter from '../components/GlobalFooter';
@@ -33,27 +33,12 @@ const copyright = (
     2017 React-News体验技术部出品
   </div>
 );
-const refreshNewsList = (dispatch, nType) => {
-  console.log(nType)
-  dispatch({
-    type: 'news/fetch',
-    payload: {
-      uID: '',
-      currentPage: 1,
-      pageSize: 10,
-      keywd: '',
-      nType: nType
-    }
-  });
-};
-const renderTypeMenuItem = dispatch => {
+const renderTypeMenuItem = () => {
   let list = [];
   for (let key in TYPE) {
     list.push(
-      <Menu.Item key={key} onClick={refreshNewsList.bind(this,dispatch, key)}>
-        <Link to={`/${key}`}>
-          {TYPE[key]}
-        </Link>
+      <Menu.Item key={key}>
+        <Link to={`/${key}`}>{TYPE[key]}</Link>
       </Menu.Item>
     );
   }
@@ -61,6 +46,9 @@ const renderTypeMenuItem = dispatch => {
 };
 
 class IndexLayout extends React.PureComponent {
+  state = {
+    selectSort: []
+  };
   static childContextTypes = {
     location: PropTypes.object
   };
@@ -91,6 +79,17 @@ class IndexLayout extends React.PureComponent {
       this.props.dispatch(routerRedux.push('/dashboard/my-collection'));
     }
   };
+  clickSortMenuItem = ({ item, key, keyPath }) => {
+    this.setState({
+      selectSort: [].concat(key)
+    });
+  };
+  backToHome = () => {
+    this.setState({
+      selectSort: []
+    });
+    this.props.dispatch(routerRedux.push('/'));
+  };
   render() {
     const { getRouteData, currentUser } = this.props;
     const menu = (
@@ -109,13 +108,15 @@ class IndexLayout extends React.PureComponent {
           <div className={styles.top}>
             <Header className={styles.header}>
               <div className={styles['logo-wrapper']}>
-                <Link to="/">
+                <div onClick={this.backToHome.bind(this)}>
                   <img src={logo} alt="logo" className={styles.logo} />
-                </Link>
+                </div>
               </div>
               <Menu
                 theme="dark"
                 mode="horizontal"
+                selectedKeys={this.state.selectSort}
+                onClick={this.clickSortMenuItem.bind(this)}
                 style={{
                   lineHeight: '64px'
                 }}
@@ -128,7 +129,7 @@ class IndexLayout extends React.PureComponent {
                     </span>
                   }
                 >
-                  {renderTypeMenuItem(this.props.dispatch)}
+                  {renderTypeMenuItem()}
                 </SubMenu>
                 <div className={styles.right}>
                   {currentUser.uName ? (
