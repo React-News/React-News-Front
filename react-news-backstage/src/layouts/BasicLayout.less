@@ -1,5 +1,4 @@
 @import '~antd/lib/style/themes/default.less';
-
 .header {
   padding: 0 12px 0 0;
   background: #fff;
@@ -69,7 +68,7 @@
       vertical-align: middle;
     }
     &:global(.ant-popover-open),
-    &:hover {
+    & :hover {
       background: @primary-1;
     }
   }
@@ -83,8 +82,8 @@
   .account {
     .avatar {
       margin: 20px 8px 20px 0;
-      color: @primary-color;
-      background: rgba(255, 255, 255, 0.85);
+      color: #f56a00;
+      background-color: #fde3cf;
       vertical-align: middle;
     }
   }
@@ -96,17 +95,6 @@
   }
   :global(.ant-dropdown-menu-item) {
     width: 160px;
-  }
-}
-
-:global {
-  .ant-layout {
-    overflow-x: hidden;
-  }
-  .ant-menu:not(.ant-menu-horizontal) {
-    .ant-menu-item-selected {
-      background: @primary-color;
-    }
   }
 }
 

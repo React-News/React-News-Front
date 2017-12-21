@@ -1,20 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { List, Avatar, Icon, Row, Col, Tag, Spin } from 'antd';
+import { message, Avatar, Icon, Row, Col, Tag, Spin } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
+import { addCollection, deleteCollection, isCollected } from '../../services/collection';
 import { queryNewsDetail } from '../../services/news';
 import { TYPE, smoothScrollToTop } from '../../utils/utils';
 import classNames from 'classnames';
 
+@connect(state => ({
+  user: state.user
+}))
 export default class NewsDetail extends Component {
   state = {
-    news: {}
+    news: {},
+    isCollected: true,
+    cID: -1
   };
+  confirmCollection() {
+    let nID = this.props.match.params.nID;
+    isCollected({ nID }).then(res => {
+      console.log(res);
+      if (res.status === '200') {
+        this.setState({
+          isCollected: res.data ? true : false,
+          cID: res.data ? res.data.cID : -1
+        });
+      } else {
+        this.props.dispatch(routerRedux.push('/exception/404'));
+      }
+    });
+  }
   componentDidMount() {
     let nID = this.props.match.params.nID;
-    console.log(nID);
+    this.confirmCollection();
     queryNewsDetail({ nID }).then(res => {
       console.log(res);
       if (res.status === '200') {
@@ -24,11 +44,50 @@ export default class NewsDetail extends Component {
         smoothScrollToTop();
         console.log(this.state.news);
       } else {
-        this.props.dispatch(routerRedux.push('/404'));
+        this.props.dispatch(routerRedux.push('/exception/404'));
       }
     });
   }
-
+  collectNews() {
+    let params = {
+      nID: this.props.match.params.nID
+    };
+    console.log(params);
+    addCollection(params).then(res => {
+      console.log(res);
+      if (res.status === '200') {
+        this.setState({
+          isCollected: true
+        });
+        message.success('收藏添加成功');
+        smoothScrollToTop();
+        this.confirmCollection();
+      } else {
+        message.error('收藏添加失败');
+      }
+    });
+  }
+  cancelCollection() {
+    this.setState({
+      isCollected: false
+    });
+    let params = {
+      cID: this.state.cID
+    };
+    console.log(params);
+    deleteCollection(params).then(res => {
+      console.log(res);
+      if (res.status === '200') {
+        this.setState({
+          isCollected: false
+        });
+        message.success('收藏取消成功');
+        smoothScrollToTop();
+      } else {
+        message.error('收藏取消失败');
+      }
+    });
+  }
   render() {
     const { news } = this.state;
     let newsContent;
@@ -58,7 +117,10 @@ export default class NewsDetail extends Component {
                 </div>
                 <span className={styles.name}>{news.nCreaterInfo.uName}</span>
                 <br />
-                <span className={styles.createAt}>{moment(news.nCreatedAt).fromNow()}</span>
+                <span className={styles.createAt}>{moment(news.nCreatedAt).format('YYYY-MM-DD  hh:mm')}</span>
+                <Tag color="#108ee9" className={styles.type}>
+                  {TYPE[news.nType]}
+                </Tag>
               </div>
             ) : (
               <Spin />
@@ -75,6 +137,12 @@ export default class NewsDetail extends Component {
             ) : (
               <Spin />
             )}
+            <div className={styles.action}>
+              <div className={styles.collection}>
+                <Icon type="star" className={styles.star} onClick={this.cancelCollection.bind(this)} style={{ display: this.state.isCollected ? 'inline-block' : 'none' }} />
+                <Icon type="star-o" className={styles.starO} onClick={this.collectNews.bind(this)} style={{ display: !this.state.isCollected ? 'inline-block' : 'none' }} />
+              </div>
+            </div>
           </Col>
           <Col span={8}>col-12</Col>
         </Row>

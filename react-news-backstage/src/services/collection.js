@@ -3,6 +3,15 @@ import { stringify } from 'qs';
 export async function query(params) {
   return request(`/api/collectionList?${stringify(params)}`);
 }
+export async function isCollected(params) {
+  let uID = sessionStorage.getItem('uID');
+  let newParams = {
+    ...params,
+    uID
+  };
+  console.log(newParams);
+  return request(`/api/isCollected?${stringify(newParams)}`);
+}
 
 export async function addCollection(params) {
   let uID = sessionStorage.getItem('uID');

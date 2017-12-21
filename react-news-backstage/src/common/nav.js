@@ -17,28 +17,6 @@ export const getNavData = app => [
     path: '/dashboard',
     children: [
       {
-        name: '异常',
-        path: 'exception',
-        icon: 'warning',
-        children: [
-          {
-            name: '403',
-            path: '403',
-            component: dynamicWrapper(app, [], import('../routes/Exception/403'))
-          },
-          {
-            name: '404',
-            path: '404',
-            component: dynamicWrapper(app, [], import('../routes/Exception/404'))
-          },
-          {
-            name: '500',
-            path: '500',
-            component: dynamicWrapper(app, [], import('../routes/Exception/500'))
-          }
-        ]
-      },
-      {
         name: '修改个人信息',
         path: '/dashboard/edit-my-info',
         icon: 'edit',
@@ -146,6 +124,28 @@ export const getNavData = app => [
                 component: dynamicWrapper(app, ['news'], import('../routes/NewsDetail'))
               }
             ]
+          }
+        ]
+      },
+      {
+        name: '异常',
+        path: 'exception',
+        icon: 'warning',
+        children: [
+          {
+            name: '403',
+            path: '403',
+            component: dynamicWrapper(app, [], import('../routes/Exception/403'))
+          },
+          {
+            name: '404',
+            path: '404',
+            component: dynamicWrapper(app, [], import('../routes/Exception/404'))
+          },
+          {
+            name: '500',
+            path: '500',
+            component: dynamicWrapper(app, [], import('../routes/Exception/500'))
           }
         ]
       }

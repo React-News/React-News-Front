@@ -31,6 +31,10 @@
       font-size: 15px;
       line-height: 20px;
     }
+    .type {
+      float: right;
+      margin-top: -8px;
+    }
   }
   .cover {
     padding-bottom: 60px;
@@ -41,13 +45,31 @@
     font-weight: 400;
     font-size: 18px;
   }
+  .action {
+    width: 100%;
+    margin-bottom: 25px;
+    padding: 25px 0;
+    border-style: solid;
+    border-color: #d5d5d6;
+    border-width: 1px 0;
+    color: #ababab;
+    .collection {
+      font-size: 30px;
+      .star {
+        color: #f7ba2a;
+      }
+      .starO {
+        color: #c6d1de;
+      }
+    }
+  }
 }
 
 .clearfix {
   display: inline-block;
   &:after {
     display: block;
-    content: ".";
+    content: '.';
     height: 0;
     line-height: 0;
     clear: both;

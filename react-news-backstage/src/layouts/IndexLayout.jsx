@@ -135,7 +135,14 @@ class IndexLayout extends React.PureComponent {
                   {currentUser.uName ? (
                     <Dropdown overlay={menu}>
                       <span className={`${styles.action} ${styles.account}`}>
-                        <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} /> {currentUser.uName}
+                        {currentUser.uAvatar ? (
+                          <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} />
+                        ) : (
+                          <Avatar size="small" className={styles.avatar}>
+                            {currentUser.uName[0]}
+                          </Avatar>
+                        )}
+                        {currentUser.uName}
                       </span>
                     </Dropdown>
                   ) : (

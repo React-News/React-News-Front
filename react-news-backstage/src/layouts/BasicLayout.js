@@ -113,10 +113,23 @@ class BasicLayout extends React.PureComponent {
       return [];
     }
     return menusData.map(item => {
-      // console.log(item)
-      if (!item.name) {
+      // 任何人都看不到的路由
+      if (!item.name || item.name === '异常' || item.name === '帐户' || item.name === '展示页') {
         return null;
       }
+      // 编辑和普通用户都看不到的路由
+      if (this.props.currentUser.uAuthority === 'EDITOR' || this.props.currentUser.uAuthority === 'NORMAL') {
+        if (item.name === '用户列表' || (item.name === '删除新闻' && item.path === '/dashboard/delete-news-admin')) {
+          return null;
+        }
+      }
+      // 普通用户看不到的路由
+      if (this.props.currentUser.uAuthority === 'NORMAL') {
+        if (item.name === '编辑特权') {
+          return null;
+        }
+      }
+      console.log(item);
       let itemPath;
       if (item.path.indexOf('http') === 0) {
         itemPath = item.path;
@@ -238,7 +251,13 @@ class BasicLayout extends React.PureComponent {
               {currentUser.uName ? (
                 <Dropdown overlay={menu}>
                   <span className={`${styles.action} ${styles.account}`}>
-                    <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} />
+                    {currentUser.uAvatar ? (
+                      <Avatar size="small" className={styles.avatar} src={currentUser.uAvatar} />
+                    ) : (
+                      <Avatar size="small" className={styles.avatar}>
+                        {currentUser.uName[0]}
+                      </Avatar>
+                    )}
                     {currentUser.uName}
                   </span>
                 </Dropdown>
