@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
 import { List, Avatar, Icon, Row, Col, Tag } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
-import { TYPE } from '../../utils/utils';
+import { TYPE, smoothScrollToTop } from '../../utils/utils';
 @connect(state => ({
   news: state.news
 }))
@@ -22,6 +22,7 @@ export default class Index extends Component {
           nType: nextProps.match.params.nType
         }
       });
+      smoothScrollToTop()
     }
   }
   componentDidMount() {
@@ -36,6 +37,7 @@ export default class Index extends Component {
         nType: nType
       }
     });
+    smoothScrollToTop()
   }
   onChangePagination = pagination => {
     const { dispatch } = this.props;
@@ -50,6 +52,7 @@ export default class Index extends Component {
       type: 'news/fetch',
       payload: params
     });
+    smoothScrollToTop()
   };
 
   render() {
@@ -86,7 +89,7 @@ export default class Index extends Component {
                 <List.Item
                   key={item.nID}
                   actions={[<IconText type="star-o" text={item.starNum} key="starNum" />, <IconText type="message" text={item.commentNum} key="commentNum" />]}
-                  extra={<img className={styles.imgResponsive} alt="logo" src={item.nImg} />}
+                  extra={<div className={styles.imgResponsive}><img alt="logo" src={item.nImg} /></div>}
                 >
                   <span className={styles.listExtra}>
                     <Avatar src={item.createrInfo.uAvatar} size="small" />
@@ -95,7 +98,7 @@ export default class Index extends Component {
 
                   <List.Item.Meta
                     avatar={<Avatar src={item.createrInfo.uAvatar} />}
-                    title={<a href={`/newsDetail/${item.nID}`}>{item.nTitle}</a>}
+                    title={<Link to={`/newsDetail/${item.nID}`}>{item.nTitle}</Link>}
                     description={<Tag>{TYPE[item.nType]}</Tag>}
                   />
                 </List.Item>

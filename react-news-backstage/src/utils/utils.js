@@ -39,14 +39,7 @@ export function getTimeDistance(type) {
     const nextYear = nextDate.year();
     const nextMonth = nextDate.month();
 
-    return [
-      moment(`${year}-${fixedZero(month + 1)}-01 00:00:00`),
-      moment(
-        moment(
-          `${nextYear}-${fixedZero(nextMonth + 1)}-01 00:00:00`
-        ).valueOf() - 1000
-      )
-    ];
+    return [moment(`${year}-${fixedZero(month + 1)}-01 00:00:00`), moment(moment(`${nextYear}-${fixedZero(nextMonth + 1)}-01 00:00:00`).valueOf() - 1000)];
   }
 
   if (type === 'year') {
@@ -81,10 +74,7 @@ export function digitUppercase(n) {
   let num = Math.abs(n);
   let s = '';
   fraction.forEach((item, index) => {
-    s += (digit[Math.floor(num * 10 * 10 ** index) % 10] + item).replace(
-      /零./,
-      ''
-    );
+    s += (digit[Math.floor(num * 10 * 10 ** index) % 10] + item).replace(/零./, '');
   });
   s = s || '整';
   num = Math.floor(num);
@@ -124,3 +114,11 @@ export const AUTHORITY = {
   EDITOR: '编辑用户',
   ADMIN: '管理员'
 };
+
+export function smoothScrollToTop() {
+  var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+  if (currentScroll > 0) {
+    window.requestAnimationFrame(smoothScrollToTop);
+    window.scrollTo(0, currentScroll - currentScroll / 5);
+  }
+}

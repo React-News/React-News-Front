@@ -138,8 +138,14 @@ export const getNavData = app => [
           },
           {
             name: '详情页',
-            path: '/newsDetail/:nID',
-            component: dynamicWrapper(app, [], import('../routes/newsDetail'))
+            path: '/newsDetail',
+            children: [
+              {
+                name: 'newsList2',
+                path: '/:nID',
+                component: dynamicWrapper(app, ['news'], import('../routes/NewsDetail'))
+              }
+            ]
           }
         ]
       }

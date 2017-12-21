@@ -27,11 +27,18 @@
       line-height: 25px;
       font-family: 'Helvetica Neue', 'Helvetica', 'Nimbus Sans L', 'Arial', 'Liberation Sans', 'Hiragino Sans GB', 'Microsoft YaHei', 'Wenquanyi Micro Hei', 'WenQuanYi Zen Hei', 'ST Heiti', 'SimHei', 'WenQuanYi Zen Hei Sharp', sans-serif;
       font-weight: 400;
+      @media (min-width: 1260px) {
+        display: block;
+        font-size: 30px;
+        line-height: 35px;
+      }
     }
   }
 }
 
 .listExtra {
+  font-size: 15px;
+  font-weight: 400;
   color: @text-color-secondary;
   margin-top: 16px;
   line-height: 22px;
@@ -50,9 +57,10 @@
 }
 
 .imgResponsive {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  min-width: 300px;
-  display: block;
+  max-height: 200px;
+  overflow: hidden;
+  img {
+    width: 300px;
+    height: 100%;
+  }
 }
