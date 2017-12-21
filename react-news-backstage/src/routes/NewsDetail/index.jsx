@@ -11,7 +11,8 @@ import { TYPE, smoothScrollToTop } from '../../utils/utils';
 import classNames from 'classnames';
 
 @connect(state => ({
-  user: state.user
+  user: state.user,
+  comment: state.comment
 }))
 export default class NewsDetail extends Component {
   state = {
@@ -33,6 +34,17 @@ export default class NewsDetail extends Component {
       }
     });
   }
+  refreshCommentList() {
+    let nID = this.props.match.params.nID;
+    this.props.dispatch({
+      type: 'comment/fetch',
+      payload: {
+        nID: nID,
+        currentPage: 1,
+        pageSize: 10
+      }
+    });
+  }
   componentDidMount() {
     let nID = this.props.match.params.nID;
     this.confirmCollection();
@@ -48,6 +60,7 @@ export default class NewsDetail extends Component {
         this.props.dispatch(routerRedux.push('/exception/404'));
       }
     });
+    this.refreshCommentList();
   }
   collectNews() {
     let params = {
@@ -90,6 +103,8 @@ export default class NewsDetail extends Component {
     });
   }
   render() {
+    let nID = this.props.match.params.nID;
+    const { user: { currentUser }, comment: { data, loading } } = this.props;
     const { news } = this.state;
     let newsContent;
     if (news.nContent) {
@@ -149,7 +164,7 @@ export default class NewsDetail extends Component {
         </Row>
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 14, offset: 2 }} xl={{ span: 14, offset: 2 }}>
-            <CommentBlock />
+            <CommentBlock currentUser={currentUser} dataSource={data} refreshCommentList={this.refreshCommentList} nID={nID} />
           </Col>
         </Row>
       </div>

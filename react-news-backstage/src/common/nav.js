@@ -121,7 +121,7 @@ export const getNavData = app => [
               {
                 name: 'newsList2',
                 path: '/:nID',
-                component: dynamicWrapper(app, ['news'], import('../routes/NewsDetail'))
+                component: dynamicWrapper(app, ['news', 'comment'], import('../routes/NewsDetail'))
               }
             ]
           }
