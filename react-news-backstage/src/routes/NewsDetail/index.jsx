@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { message, Avatar, Icon, Row, Col, Tag, Spin } from 'antd';
+import CommentBlock from '../../components/CommentBlock';
 import moment from 'moment';
 import styles from './index.less';
 import { addCollection, deleteCollection, isCollected } from '../../services/collection';
@@ -145,6 +146,11 @@ export default class NewsDetail extends Component {
             </div>
           </Col>
           <Col span={8}>col-12</Col>
+        </Row>
+        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+          <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 14, offset: 2 }} xl={{ span: 14, offset: 2 }}>
+            <CommentBlock />
+          </Col>
         </Row>
       </div>
     );
