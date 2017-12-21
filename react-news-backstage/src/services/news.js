@@ -5,7 +5,7 @@ export async function query(params) {
 }
 
 export async function queryNewsDetail(params) {
-  return request(`/api/newsDitail?${stringify(params)}`);
+  return request(`/api/newsDetail?${stringify(params)}`);
 }
 
 export async function addNews(params) {
