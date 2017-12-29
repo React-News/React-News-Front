@@ -110,6 +110,12 @@ export default class NewsDetail extends Component {
     if (news.nContent) {
       newsContent = news.nContent.split('\n').filter(item => item !== '');
     }
+    const IconText = ({ type, text }) => (
+      <span style={{ fontSize: '30px', marginLeft: '20px', float: 'right' }}>
+        <Icon type={type} style={{ marginRight: 8, fontSize: '30px' }} />
+        {text}
+      </span>
+    );
     return (
       <div className={styles.container}>
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
@@ -153,18 +159,19 @@ export default class NewsDetail extends Component {
             ) : (
               <Spin />
             )}
-            <div className={styles.action}>
+            <div className={classNames(styles.action,styles.clearfix )}>
               <div className={styles.collection}>
                 <Icon type="star" className={styles.star} onClick={this.cancelCollection.bind(this)} style={{ display: this.state.isCollected ? 'inline-block' : 'none' }} />
                 <Icon type="star-o" className={styles.starO} onClick={this.collectNews.bind(this)} style={{ display: !this.state.isCollected ? 'inline-block' : 'none' }} />
               </div>
+              <IconText type="star-o" text={news.starNum} className={styles.starNum} />
+              <IconText type="message" text={news.commentNum} className={styles.commentNum} />
             </div>
           </Col>
-          <Col span={8}>col-12</Col>
         </Row>
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           <Col xs={{ span: 24, offset: 0 }} sm={{ span: 24, offset: 0 }} md={{ span: 24, offset: 0 }} lg={{ span: 14, offset: 2 }} xl={{ span: 14, offset: 2 }}>
-            <CommentBlock currentUser={currentUser} dataSource={data} refreshCommentList={this.refreshCommentList} nID={nID} />
+            <CommentBlock currentUser={currentUser} dataSource={data} refreshCommentList={this.refreshCommentList.bind(this)} nID={nID} />
           </Col>
         </Row>
       </div>

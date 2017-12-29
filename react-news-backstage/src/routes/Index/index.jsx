@@ -105,7 +105,6 @@ export default class Index extends Component {
               )}
             />
           </Col>
-          <Col span={8}>col-12</Col>
         </Row>
       </div>
     );

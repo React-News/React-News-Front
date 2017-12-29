@@ -28,12 +28,12 @@ export const getNavData = app => [
         icon: 'star',
         component: dynamicWrapper(app, ['collection'], import('../routes/Collection'))
       },
-      {
-        name: '我的评论',
-        path: '/dashboard/my-comment',
-        icon: 'message',
-        component: dynamicWrapper(app, ['list'], import('../routes/MyComment'))
-      },
+      // {
+      //   name: '我的评论',
+      //   path: '/dashboard/my-comment',
+      //   icon: 'message',
+      //   component: dynamicWrapper(app, ['list'], import('../routes/MyComment'))
+      // },
       {
         name: '编辑特权',
         path: '/dashboard/editer-authority',

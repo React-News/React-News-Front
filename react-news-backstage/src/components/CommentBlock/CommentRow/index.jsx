@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar } from 'antd';
+import { Avatar, message } from 'antd';
 import styles from './index.less';
 const BetterAvatar = createrInfo => {
   return createrInfo.uAvatar ? <Avatar size="large" src={createrInfo.uAvatar} /> : <Avatar size="large">{createrInfo.uName[0]}</Avatar>;
@@ -12,14 +12,22 @@ const restoreListItem = restore => {
         <div className={styles.createrInfo}>
           <span className={styles.name}>{restore.createrInfo.uName}</span>
         </div>
-        <p className={styles.content}>
-          {restore.rContent}
-        </p>
+        <p className={styles.content}>{restore.rContent}</p>
       </div>
     </div>
   );
 };
 export default class CommentRow extends Component {
+  addReview(e) {
+    const { list: { createrInfo, pList }, list, currentUser } = this.props;
+    e.preventDefault();
+    console.log('------------------',list);
+    if (currentUser.uID) {
+      this.props.showCommentModal(list.rID);
+    } else {
+      message.warning('你登录后才能发回复');
+    }
+  }
   render() {
     const { list: { createrInfo, pList }, list } = this.props;
     return (
@@ -31,11 +39,11 @@ export default class CommentRow extends Component {
           </div>
           <p className={styles.content}>{list.rContent}</p>
           <div className={styles.action}>
-            <a href="#">回复</a>
+            <a href="#" onClick={this.addReview.bind(this)}>
+              回复
+            </a>
           </div>
-          <div className={styles.restoreList}>
-            {pList.map(item => restoreListItem(item))}
-          </div>
+          <div className={styles.restoreList}>{pList.map(item => restoreListItem(item))}</div>
         </div>
       </div>
     );
